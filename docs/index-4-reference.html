@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>كتالوج تصميم ماكينة تركيب الروندلات - م. مصطفى خالد</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+  body { background: #070b12; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+
+  /* الهيدر العلوي الثابت */
+  .header-bar { background: linear-gradient(135deg, #162032, #0b111e); border: 1px solid #2e4057; border-radius: 10px; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.5); }
+  .header-title h1 { font-size: 1.2rem; color: #38bdf8; margin-bottom: 3px; }
+  .header-title p { font-size: 0.82rem; color: #94a3b8; }
+
+  .designer-box { background: #090d16; border: 1px solid #facc15; border-right: 4px solid #facc15; padding: 6px 14px; border-radius: 8px; }
+  .designer-box .d-name { color: #facc15; font-weight: bold; font-size: 0.92rem; }
+  .designer-box .d-phones { color: #e2e8f0; font-family: Consolas, monospace; font-size: 0.82rem; direction: ltr; text-align: right; }
+
+  /* شريط أرقام الصفحات (مثل الكتاب التفاعلي) */
+  .pagination-bar { background: #111827; border: 1px solid #283548; border-radius: 10px; padding: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .page-nav-btns { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; justify-content: center; }
+  .p-btn { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.82rem; transition: 0.2s; }
+  .p-btn:hover { background: #334155; color: #fff; }
+  .p-btn.active { background: #2563eb; color: #fff; border-color: #60a5fa; box-shadow: 0 0 12px rgba(37,99,235,0.4); }
+
+  .next-prev-btn { background: #facc15; color: #000; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem; transition: 0.2s; }
+  .next-prev-btn:hover { background: #fde047; }
+  .next-prev-btn:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
+
+  /* حاوية الصفحة الواحدة */
+  .page-view { display: none; background: #111827; border: 2px solid #2e4057; border-radius: 12px; padding: 16px; flex: 1; flex-direction: column; gap: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+  .page-view.active { display: flex; }
+
+  .page-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 10px; flex-wrap: wrap; gap: 10px; }
+  .page-header h2 { font-size: 1.15rem; color: #facc15; }
+  .page-badge { background: #0f172a; color: #38bdf8; border: 1px solid #38bdf8; padding: 4px 12px; border-radius: 6px; font-size: 0.82rem; font-weight: bold; }
+
+  /* تخطيط محتوى الصفحة: الرسم الكبير + الشرح بالخطوات 1-2-3 */
+  .page-layout { display: grid; grid-template-columns: 1.45fr 1fr; gap: 16px; align-items: stretch; flex: 1; }
+  @media (max-width: 950px) { .page-layout { grid-template-columns: 1fr; } }
+
+  .canvas-stage { background: radial-gradient(circle at center, #162238 0%, #080c14 100%); border: 1px solid #283548; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; position: relative; }
+  canvas { width: 100%; max-width: 720px; height: auto; display: block; border-radius: 6px; }
+  canvas.full-width-canvas { max-width: 1120px; }
+
+  .stage-controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; width: 100%; padding-top: 6px; border-top: 1px solid #1e293b; }
+  .ctrl-btn { background: #2563eb; color: #fff; border: 1px solid #3b82f6; padding: 6px 13px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: bold; }
+  .ctrl-btn.green { background: #16a34a; border-color: #22c55e; }
+  .ctrl-btn.gray { background: #334155; border-color: #475569; }
+
+  .explanation-col { display: flex; flex-direction: column; gap: 10px; justify-content: center; }
+  .step-box { background: #0b111e; border: 1px solid #1e293b; border-radius: 8px; padding: 12px; display: flex; gap: 12px; align-items: flex-start; transition: 0.2s; cursor: pointer; }
+  .step-box.active-step { background: rgba(22, 163, 74, 0.16); border-color: #22c55e; box-shadow: 0 0 12px rgba(34,197,94,0.15); }
+  .step-num { background: #334155; color: #fff; font-weight: bold; min-width: 30px; height: 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; flex-shrink: 0; }
+  .step-box.active-step .step-num { background: #22c55e; color: #000; }
+  .step-content h4 { font-size: 0.95rem; color: #38bdf8; margin-bottom: 4px; }
+  .step-box.active-step .step-content h4 { color: #4ade80; }
+  .step-content p { font-size: 0.84rem; color: #cbd5e1; line-height: 1.5; }
+
+  .specs-note { background: rgba(250, 204, 21, 0.08); border: 1px solid rgba(250, 204, 21, 0.4); border-right: 4px solid #facc15; border-radius: 6px; padding: 10px 12px; font-size: 0.83rem; color: #fef08a; line-height: 1.5; }
+
+  /* جدول الصفحة 7 */
+  .bom-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .bom-table th, .bom-table td { border: 1px solid #283548; padding: 10px; text-align: right; }
+  .bom-table th { background: #1e293b; color: #facc15; }
+  .bom-table tr:nth-child(even) { background: #0b111e; }
+  .tag { background: #0f172a; color: #38bdf8; border: 1px solid #334155; padding: 2px 7px; border-radius: 4px; font-family: Consolas, monospace; font-weight: bold; direction: ltr; display: inline-block; }
+
+  footer { text-align: center; font-size: 0.8rem; color: #94a3b8; padding: 6px; border-top: 1px solid #1e293b; margin-top: auto; }
+
+  :root { color-scheme: dark; }
+  body { background: radial-gradient(ellipse at 50% -20%, #1d3554 0%, #090f19 48%, #05080e 100%); padding: clamp(7px,1.4vw,18px); gap: 14px; }
+  .header-bar { background: linear-gradient(135deg,rgba(23,39,60,.98),rgba(8,14,24,.98)); border-color:#40556e; border-radius:14px; padding:16px 20px; box-shadow:0 12px 30px #0008,inset 0 1px #ffffff12; }
+  .header-title h1 { font-size:clamp(1.05rem,2vw,1.5rem); letter-spacing:.1px; line-height:1.5; }
+  .header-title p { line-height:1.8; }
+  .designer-box { box-shadow:inset 0 1px #ffffff10,0 5px 18px #0005; }
+  .pagination-bar { position:sticky; top:5px; z-index:5; backdrop-filter:blur(14px); background:#101a29ed; box-shadow:0 7px 22px #0005; }
+  .page-view { border-color:#344b65; background:linear-gradient(145deg,#121d2d,#0b121d 65%); box-shadow:0 14px 36px #0007,inset 0 1px #ffffff08; }
+  .canvas-stage { overflow:hidden; background:radial-gradient(ellipse at 50% 35%,#1a2b41 0%,#0b1421 58%,#080d15 100%); border-color:#34465d; box-shadow:inset 0 1px #ffffff0b; }
+  canvas { image-rendering:auto; touch-action:pan-y; }
+  .ctrl-btn,.p-btn,.next-prev-btn { min-height:38px; box-shadow:0 2px 0 #0005; }
+  .ctrl-btn:hover,.p-btn:hover,.next-prev-btn:hover { filter:brightness(1.13); transform:translateY(-1px); }
+  .step-box { border-color:#293b51; box-shadow:0 4px 12px #0002; }
+  .step-content p { line-height:1.8; }
+  .specs-note { line-height:1.8; }
+  .bom-table th { position:sticky; top:0; }
+  .bom-table td { line-height:1.75; }
+  footer { line-height:1.8; }
+  @media (max-width:650px) {
+    body { padding:6px; gap:8px; }
+    .header-bar { padding:12px; align-items:flex-start; }
+    .designer-box { width:100%; }
+    .designer-box .d-phones { text-align:right; }
+    .pagination-bar { position:static; }
+    .page-nav-btns { justify-content:flex-start; }
+    .p-btn { flex:1 1 145px; text-align:center; }
+    .page-view { padding:9px; gap:10px; }
+    .page-header h2 { font-size:1rem; line-height:1.7; }
+    .canvas-stage { padding:5px; }
+    .stage-controls { gap:6px; }
+    .ctrl-btn { flex:1 1 145px; padding:8px; }
+    .bom-table { min-width:760px; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- الهيدر العلوي -->
+<div class="header-bar">
+  <div class="header-title">
+    <h1>تصور تفاعلي لماكينة وضع الروندلة داخل الغطاء مع نقطة الغراء</h1>
+    <p>مواصفات التشغيل: غطاء خارجي 40-41 مم | داخلي 37-38 مم | شفة 1 مم -- روندلة قطر 37 مم | سمك 0.5 مم</p>
+  </div>
+  <div class="designer-box">
+    <div class="d-name">تصميم الماكينة: م. مصطفى خالد</div>
+    <div class="d-phones">01090960743</div>
+  </div>
+</div>
+
+
+<!-- شريط التنقل بين الصفحات (نظام صفحات الكتاب) -->
+<div class="pagination-bar">
+  <button class="next-prev-btn" id="btnPrev" onclick="changePage(-1)">➔ الصفحة السابقة</button>
+  <div class="page-nav-btns">
+    <button class="p-btn active" onclick="goToPage(0)">صفحة 1: الماكينة كاملة 3D</button>
+    <button class="p-btn" onclick="goToPage(1)">صفحة 2: أدوس الغراء باللسان الداخلي</button>
+    <button class="p-btn" onclick="goToPage(2)">صفحة 3: ماسورة الروندلات واللسان</button>
+    <button class="p-btn" onclick="goToPage(3)">صفحة 4: الشاكوش الثابت والكبس</button>
+    <button class="p-btn" onclick="goToPage(4)">صفحة 5: مجرى الأغطية وبستم الزق</button>
+    <button class="p-btn" onclick="goToPage(5)">صفحة 6: توصيل الهواء والكهرباء</button>
+    <button class="p-btn" onclick="goToPage(6)">صفحة 7: المقاسات والمشتريات</button>
+  </div>
+  <button class="next-prev-btn" id="btnNext" onclick="changePage(1)">الصفحة التالية ⬅</button>
+</div>
+
+<!-- ========================================================================= -->
+<!-- صفحة 1: الماكينة الكاملة 3D أثناء التشغيل -->
+<!-- ========================================================================= -->
+<div class="page-view active" id="page0">
+  <div class="page-header">
+    <h2>صفحة 1 من 7: التصميم الكامل للماكينة (3D) مع أدوس الغراء ذو اللسان الداخلي والشاكوش الثابت</h2>
+    <span class="page-badge">نظرة شاملة للخط بالكامل</span>
+  </div>
+
+  <div class="canvas-stage">
+    <canvas id="p1Canvas" class="full-width-canvas" width="1120" height="430"></canvas>
+    <div class="stage-controls">
+      <button class="ctrl-btn green" onclick="p1Auto=true">تشغيل أوتوماتيك مستمر</button>
+      <button class="ctrl-btn gray" onclick="p1Auto=false">إيقاف مؤقت</button>
+      <button class="ctrl-btn" onclick="p1Auto=false; p1Step=(p1Step+1)%6; p1Prog=0;">تقديم خطوة (Step +1)</button>
+      <span style="color:#facc15; font-size:0.85rem; align-self:center; margin-right:10px;" id="p1StatusText">الخطوة الحالية: 1</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- صفحة 2: ابتكار أدوس الغراء باللسان الداخلي والبستم الصغير (أقل تكلفة) -->
+<!-- ========================================================================= -->
+<div class="page-view" id="page1">
+  <div class="page-header">
+    <h2>صفحة 2 من 7: تصميم "أدوس الغراء باللسان الداخلي والبستم الصغير" (آلية فتح وغلق سريعة (تحتاج اختبار نوع الغراء))</h2>
+    <span class="page-badge">تصور اقتصادي مبدئي</span>
+  </div>
+
+  <div class="page-layout">
+    <div class="canvas-stage">
+      <canvas id="p2Canvas" width="660" height="400"></canvas>
+      <div class="stage-controls">
+        <button class="ctrl-btn green" onclick="p2Mode='auto'">تشغيل تتابعي (فتح وغلق سريع)</button>
+        <button class="ctrl-btn gray" onclick="p2Mode='manual'; p2Sub=1">وضع 1: مقفول (حجز الغراء)</button>
+        <button class="ctrl-btn gray" onclick="p2Mode='manual'; p2Sub=2">وضع 2: فتح سريع (نزول النقطة)</button>
+        <button class="ctrl-btn gray" onclick="p2Mode='manual'; p2Sub=3">وضع 3: غلق وقص خيط الغراء</button>
+      </div>
+    </div>
+
+    <div class="explanation-col">
+      <div class="step-box" id="p2Box1" onclick="p2Mode='manual'; p2Sub=1">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>الوضع المقفول (لسان تفلون داخلي سادد الفتحة)</h4>
+          <p>أسفل قاع الأدوس يوجد <b>لسان داخلي من التفلون (سمك 4 مم)</b> راكب على بستم هواء صغير جداً (مقاس MAL 16x15). في وضع التوقف، جسم اللسان المصمت قافل فتحة الأدوس تماماً فلا ينزل أي غراء.</p>
+        </div>
+      </div>
+
+      <div class="step-box" id="p2Box2" onclick="p2Mode='manual'; p2Sub=2">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>الفتح الخاطف (تطابق ثقب اللسان مع ثقب الأدوس)</h4>
+          <p>عند وقوف الغطاء تحت الأدوس، يفتح البستم الصغير اللسان لمدة <b>0.2 ثانية فقط</b>؛ فيتطابق الثقب المحفور في اللسان (قطر 4 مم) مع فتحة الأدوس، فتنزل نقطة غراء واحدة محددة في سنتر الغطاء.</p>
+        </div>
+      </div>
+
+      <div class="step-box" id="p2Box3" onclick="p2Mode='manual'; p2Sub=3">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>الغلق الفوري وقص خيط الغراء (منع التسييل 100%)</h4>
+          <p>يرجع البستم الصغير فوراً ليقفل اللسان؛ وأثناء رجوعه تعمل حافة اللسان التفلون <b>كمقص ميكانيكي يقطع خيط الغراء ويمسح الفوهة</b>، قد يقلل خيط الغراء؛ يلزم اختبار الخلوص ونوع اللاصق عملياً.</p>
+        </div>
+      </div>
+
+      <div class="specs-note">
+        <b>ملاحظة التصنيع بالورشة:</b> يُصنع اللسان من <b>التفلون الأبيض (PTFE)</b> لأن التصاق كثير من المواد به منخفض، لكن التوافق مع الغراء الفعلي يجب اختباره، ويوضع أورينج كاوتش (O-Ring) حول فتحة الأدوس فوق اللسان لمنع أي تسريب جانبي.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- صفحة 3: ماسورة الروندلات واللسان السحاب (قطر 37 مم × 0.5 مم) -->
+<!-- ========================================================================= -->
+<div class="page-view" id="page2">
+  <div class="page-header">
+    <h2>صفحة 3 من 7: تصميم "ماسورة الخزنة واللسان السحاب" لسحب روندلة واحدة بالضبط</h2>
+    <span class="page-badge">مقاس الروندلة: قطر 37 مم | سمك 0.5 مم</span>
+  </div>
+
+  <div class="page-layout">
+    <div class="canvas-stage">
+      <canvas id="p3Canvas" width="660" height="400"></canvas>
+      <div class="stage-controls">
+        <button class="ctrl-btn green" onclick="p3Mode='auto'">تشغيل تتابعي (1 - 2 - 3)</button>
+        <button class="ctrl-btn gray" onclick="p3Mode='manual'; p3Sub=1">1: استلام روندلة في الجيب</button>
+        <button class="ctrl-btn gray" onclick="p3Mode='manual'; p3Sub=2">2: سحب الروندلة وحجز الماسورة</button>
+        <button class="ctrl-btn gray" onclick="p3Mode='manual'; p3Sub=3">3: الرجوع لاستلام روندلة جديدة</button>
+      </div>
+    </div>
+
+    <div class="explanation-col">
+      <div class="step-box" id="p3Box1" onclick="p3Mode='manual'; p3Sub=1">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>سقوط روندلة واحدة داخل جيب اللسان المحفور</h4>
+          <p>الماسورة (قطر داخلي 37.5 مم) واقفة عمودياً فوق اللسان السحاب. اللسان محفور فيه <b>جيب دائري قطر 37.3 مم وعمق 0.4 مم فقط</b> (على قد روندلة واحدة سمك 0.5 مم بدون أي زيادة).</p>
+        </div>
+      </div>
+
+      <div class="step-box" id="p3Box2" onclick="p3Mode='manual'; p3Sub=2">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>خروج اللسان بالروندلة وقفل قاع الماسورة</h4>
+          <p>يتحرك اللسان السحاب للأمام بواسطة بستم مزدوج الذراع (TN 16x75) ليذهب بالروندلة تحت الشاكوش، بينما <b>الجزء الخلفي المصمت من اللسان يقفل قاع الماسورة</b> ويحمل باقي الروندلات.</p>
+        </div>
+      </div>
+
+      <div class="step-box" id="p3Box3" onclick="p3Mode='manual'; p3Sub=3">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>ثقب التهوية السفلي والرجوع للخزنة</h4>
+          <p>يوجد ثقب صغير (6 مم) في سنتر الجيب المحفور يسمح بدخول الهواء من أسفل الروندلة لحظة شفط الشاكوش فتطلع معاه بسهولة، ثم يرجع اللسان فاضياً تحت الماسورة ليستلم غيرها.</p>
+        </div>
+      </div>
+
+      <div class="specs-note">
+        <b>تقليل احتمال الحشر (يُراجع بالتجربة):</b> الخلوص بين قاع الماسورة وسطح اللسان السحاب يُضبط على <b>0.2 مم</b>، يساعد على فصل روندلة واحدة مبدئياً، ويجب اختبار منع ازدواج السحب عملياً.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- صفحة 4: الشاكوش الثابت بالشفط والكبس داخل شفة الـ 1 مم -->
+<!-- ========================================================================= -->
+<div class="page-view" id="page3">
+  <div class="page-header">
+    <h2>صفحة 4 من 7: تصميم "الشاكوش الثابت بالشفط" ومناولة اللسان وكبس شفة الـ 1 مم</h2>
+    <span class="page-badge">الشفط في مكانه بدون طلوع ونزول إضافي</span>
+  </div>
+
+  <div class="page-layout">
+    <div class="canvas-stage">
+      <canvas id="p4Canvas" width="660" height="400"></canvas>
+      <div class="stage-controls">
+        <button class="ctrl-btn green" onclick="p4Mode='auto'">تشغيل تتابعي (1 - 2 - 3)</button>
+        <button class="ctrl-btn gray" onclick="p4Mode='manual'; p4Sub=1">1: وقوف اللسان تحت الشاكوش الثابت</button>
+        <button class="ctrl-btn gray" onclick="p4Mode='manual'; p4Sub=2">2: شفط الروندلة بمكانه ورجوع اللسان</button>
+        <button class="ctrl-btn gray" onclick="p4Mode='manual'; p4Sub=3">3: نزول الشاكوش للكبس والعودة لمكانه</button>
+      </div>
+    </div>
+
+    <div class="explanation-col">
+      <div class="step-box" id="p4Box1" onclick="p4Mode='manual'; p4Sub=1">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>الشاكوش واقف مظبوط في مكانه واللسان يدخل تحته</h4>
+          <p>الشاكوش الحديد مضبوط ارتفاعه ليقف في مكانه فوق مسار اللسان السحاب بـ <b>1.5 إلى 2 مم فقط</b>. يدخل اللسان بالروندلة ويقف في السنتر تحت وجه الشاكوش مباشرة.</p>
+        </div>
+      </div>
+
+      <div class="step-box" id="p4Box2" onclick="p4Mode='manual'; p4Sub=2">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>الشاكوش يشفط الروندلة وهو واقف مكانه واللسان يرجع</h4>
+          <p>يفتح بلف الفاكيوم (Vacuum) فيشفط الشاكوش الروندلة من جيب اللسان <b>وهو واقف في مكانه بدون أن ينزل أو يطلع لفوق</b>، وبمجرد التقاطها يرجع اللسان السحاب فوراً تحت الماسورة.</p>
+        </div>
+      </div>
+
+      <div class="step-box" id="p4Box3" onclick="p4Mode='manual'; p4Sub=3">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>نزول الشاكوش لكبس الروندلة وتجاوز الشفة الداخلية (يحتاج تأكيداً بقياس الغطاء والروندلة)</h4>
+          <p>بعد رجوع اللسان، ينزل الشاكوش (قطر 36.4 مم) مباشرة داخل الغطاء ليكبس الروندلة (37 مم) فتتخطى الشفة الداخلية البارزة (1 مم) وتستقر الروندلة على اللاصق المناسب بعد اختبار قوة التثبيت، ثم يفصل الشفط ويطلع يقف في مكانه ثاني.</p>
+        </div>
+      </div>
+
+      <div class="specs-note">
+        <b>ميزة هذه الحركة:</b> توفر نصف وقت الدورة وتلغي الحاجة لبستم شاكوش بمشوارين، يكفي بستم واحد صغير مشوار <b>40 مم (SDA 25x40)</b>.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- صفحة 5: المجرى الرأسية 90° وبستم زق الأغطية في مجرى حرف U -->
+<!-- ========================================================================= -->
+<div class="page-view" id="page4">
+  <div class="page-header">
+    <h2>صفحة 5 من 7: تصميم "المجرى الرأسية (90°) وبستم زق الغطاء" في مجرى حرف U</h2>
+    <span class="page-badge">قطر الغطاء الخارجي: 40-41 مم</span>
+  </div>
+
+  <div class="page-layout">
+    <div class="canvas-stage">
+      <canvas id="p5Canvas" width="660" height="400"></canvas>
+      <div class="stage-controls">
+        <button class="ctrl-btn green" onclick="p5Mode='auto'">تشغيل تتابعي (1 - 2 - 3)</button>
+        <button class="ctrl-btn gray" onclick="p5Mode='manual'; p5Sub=1">1: سقوط الغطاء أمام البستم</button>
+        <button class="ctrl-btn gray" onclick="p5Mode='manual'; p5Sub=2">2: زق الغطاء وحجز العمود الرأسي</button>
+        <button class="ctrl-btn gray" onclick="p5Mode='manual'; p5Sub=3">3: رجوع البستم ونزول غطاء جديد</button>
+      </div>
+    </div>
+
+    <div class="explanation-col">
+      <div class="step-box" id="p5Box1" onclick="p5Mode='manual'; p5Sub=1">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>نزول الغطاء من المجرى الرأسية (زاوية 90°)</h4>
+          <p>شريحة ألومنيوم واقفة بزاوية 90° مفتوحة من الأسفل فوق مجرى الألومنيوم الأفقي (حرف U). ينزل الغطاء السفلي ليستقر أمام بستم الزق ووجهه المفتوح للأعلى.</p>
+        </div>
+      </div>
+
+      <div class="step-box" id="p5Box2" onclick="p5Mode='manual'; p5Sub=2">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>بستم الدفع يزق الغطاء وظهر البلوكة يسد المجرى</h4>
+          <p>يتقدم البستم (MAL 20x50) ليزق الغطاء للأمام خطوة واحدة، فيزق الأغطية التي أمامه بالتتابع، بينما <b>البلوكة الأمامية للبستم (طول 50 مم) تسد فتحة المجرى الرأسية</b> فلا يقع غطاء خلف البستم.</p>
+        </div>
+      </div>
+
+      <div class="step-box" id="p5Box3" onclick="p5Mode='manual'; p5Sub=3">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>رجوع البستم ونزول الغطاء التالي</h4>
+          <p>يرجع البستم لآخر مشواره الخلفي فتفتح المجرى الرأسية وينزل الغطاء التالي بالجاذبية فوراً استعداداً للدورة الجديدة.</p>
+        </div>
+      </div>
+
+      <div class="specs-note">
+        <b>مقاس مجرى حرف U:</b> العرض الداخلي <b>41.5 مم</b> وارتفاع الحافة الجانبية <b>15 مم</b> ليمشي الغطاء (40-41 مم) باتزان تام تحت الأدوس والشاكوش.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- صفحة 6: مخطط توصيل الهواء والكهرباء والباورات -->
+<!-- ========================================================================= -->
+<div class="page-view" id="page5">
+  <div class="page-header">
+    <h2>صفحة 6 من 7: طريقة توصيل الباورات (24V DC) وبلوف الهواء والبساتم الـ 4</h2>
+    <span class="page-badge">مخطط مبدئي للمراجعة قبل التوصيل</span>
+  </div>
+
+  <div class="canvas-stage">
+    <canvas id="p6Canvas" class="full-width-canvas" width="1120" height="440"></canvas>
+    <div class="stage-controls">
+      <button class="ctrl-btn green" onclick="p6Auto=true">تشغيل تسلسل الكهرباء والهواء</button>
+      <button class="ctrl-btn gray" onclick="p6Auto=false; p6Step=(p6Step+1)%5">تقديم خطوة على المخطط (Step +1)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- صفحة 7: جدول المكونات الاقتصادية ومقاسات الورشة -->
+<!-- ========================================================================= -->
+<div class="page-view" id="page6">
+  <div class="page-header">
+    <h2>صفحة 7 من 7: قائمة مكونات أولية ومقاسات تحتاج مراجعة واختبار</h2>
+    <span class="page-badge">قائمة مبدئية — يلزم اعتماد هندسي قبل التنفيذ</span>
+  </div>
+
+  <div style="overflow-x:auto;">
+    <table class="bom-table">
+      <thead>
+        <tr>
+          <th>م</th>
+          <th>القطعة والوظيفة في الماكينة</th>
+          <th>الموديل القياسي المطلوب</th>
+          <th>المواصفات والمقاسات التنفيذية</th>
+          <th>العدد</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><b>بستم زق الغطاء الأفقي (C1)</b></td>
+          <td><span class="tag">MAL 20x50</span> أو <span class="tag">SDA 20x50</span></td>
+          <td>قطر 20 مم، مشوار 50 مم (يركب على رأسه بلوكة تفلون طول 50 مم وعرض 40 مم لزق الغطاء وسد المجرى الرأسية أثناء التقدم).</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><b>بستم لسان الغراء الداخلي الصغير (C-Glue)</b></td>
+          <td><span class="tag">MAL 16x15</span> أو <span class="tag">SDA 16x15</span></td>
+          <td>بستم صغير جداً واقتصادي، قطر 16 مم ومشوار 15 مم فقط؛ يحرك لسان التفلون الداخلي (سمك 4 مم وثقب 4 مم) أسفل الأدوس ليفتح ويقفل في 0.2 ثانية.</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><b>بستم اللسان السحاب للروندلة (C2)</b></td>
+          <td><span class="tag">TN 16x75</span> (بعمودين دليل)</td>
+          <td>قطر 16 مم، مشوار 75 مم. يحرك اللسان السحاب (جيب قطر 37.3 مم وعمق 0.4 مم وثقب تهوية 6 مم) من تحت الماسورة إلى تحت الشاكوش.</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><b>بستم الشاكوش الرأسي (C3)</b></td>
+          <td><span class="tag">SDA 25x40</span></td>
+          <td>قطر 25 مم، مشوار 40 مم. يركب عليه رأس الشاكوش الحديد (قطر 36.4 مم مثقوب بـ 4 مم للشفط). يقف فوق اللسان بـ 2 مم وينزل يكبس داخل الغطاء.</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><b>بلف توليد الشفط (Vacuum Ejector)</b></td>
+          <td><span class="tag">ZH07BS</span> أو <span class="tag">CV-10HS</span></td>
+          <td>قطعة نيوماتيك صغيرة ورخيصة تحول الهواء المضغوط إلى شفط (Vacuum) في الشاكوش بدون الحاجة لطلمبة فاكيوم كهربائية.</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><b>مشط بلوف توجيه الهواء (24V DC)</b></td>
+          <td><span class="tag">4V210-08 (x4)</span> + <span class="tag">3V210-08 (x1)</span></td>
+          <td>4 بلوف (5/2) للبساتم الأربعة + 1 بلف (3/2) لتشغيل وفصل شفط الشاكوش، راكبين على مشط ألومنيوم واحد (5 عيون) بجهد 24V DC على الباورات التي جهزتها.</td>
+          <td>طقم (5 بلوف)</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><b>خوانق سرعة وحساسات مغناطيسية</b></td>
+          <td><span class="tag">SL6-01 (x8)</span> + <span class="tag">CS1-U (x4)</span></td>
+          <td>8 خوانق سرعة تركب على البساتم لضبط سرعة الفتح والقفل، و4 حساسات سلكين تركب على بستم اللسان والشاكوش لتسليم الحركات أوتوماتيكياً.</td>
+          <td>طقم</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<footer>
+  جميع حقوق التصميم محفوظة -- <b>م. مصطفى خالد</b> | للتواصل: <span dir="ltr">01090960743</span>
+</footer>
+
+<script>
+// =========================================================
+// نظام التنقل بين الصفحات الـ 7
+// =========================================================
+let currentPage = 0;
+const totalPages = 7;
+
+function goToPage(idx) {
+  currentPage = idx;
+  const pages = document.querySelectorAll('.page-view');
+  const btns = document.querySelectorAll('.p-btn');
+  pages.forEach((p, i) => p.className = (i === idx) ? 'page-view active' : 'page-view');
+  btns.forEach((b, i) => b.className = (i === idx) ? 'p-btn active' : 'p-btn');
+  document.getElementById('btnPrev').disabled = (idx === 0);
+  document.getElementById('btnNext').disabled = (idx === totalPages - 1);
+}
+
+function changePage(delta) {
+  let next = currentPage + delta;
+  if (next >= 0 && next < totalPages) goToPage(next);
+}
+
+function highlightBoxes(prefix, activeSub) {
+  for (let i = 1; i <= 3; i++) {
+    const el = document.getElementById(prefix + i);
+    if (el) el.className = (i === activeSub) ? 'step-box active-step' : 'step-box';
+  }
+}
+
+// =========================================================
+// دوال الرسم ثلاثي الأبعاد (3D Engine)
+// =========================================================
+// تحسينات رسم محلية: شبكة هندسية، ظلال، مسامير، ومكونات نيوماتيك أوضح.
+function drawTechnicalBackground(ctx, w, h) {
+  ctx.save();
+  ctx.fillStyle = '#0a1320'; ctx.fillRect(0,0,w,h);
+  ctx.strokeStyle = 'rgba(111,153,194,.09)'; ctx.lineWidth = 1;
+  const step = 28;
+  for (let x=0; x<=w; x+=step) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+  for (let y=0; y<=h; y+=step) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+  const glow = ctx.createRadialGradient(w*.5,h*.42,5,w*.5,h*.42,Math.max(w,h)*.68);
+  glow.addColorStop(0,'rgba(45,82,119,.22)'); glow.addColorStop(1,'rgba(2,7,14,.18)');
+  ctx.fillStyle=glow; ctx.fillRect(0,0,w,h);
+  ctx.restore();
+}
+function drawBolt(ctx,x,y,r=3) {
+  ctx.save(); ctx.fillStyle='#202c3a'; ctx.strokeStyle='#b5c3d2'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.arc(x,y,r+1,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  ctx.strokeStyle='#dbe5ee'; ctx.lineWidth=.8; ctx.beginPath(); ctx.moveTo(x-r*.55,y); ctx.lineTo(x+r*.55,y); ctx.stroke(); ctx.restore();
+}
+function drawCylinderAssembly(ctx,x,y,w,h,stroke= '#9fb0c2',accent='#1688bd',extend=0) {
+  ctx.save();
+  const cy=y+h/2;
+  // cylinder barrel
+  let g=ctx.createLinearGradient(x,y,x+w,y);
+  g.addColorStop(0,'#263748'); g.addColorStop(.18,'#c3d0dc'); g.addColorStop(.36,'#657b90'); g.addColorStop(.58,'#e0e8ef'); g.addColorStop(.82,'#536a7f'); g.addColorStop(1,'#1c2a39');
+  ctx.fillStyle=g; ctx.strokeStyle=stroke; ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.roundRect(x,y,w,h,h*.16); ctx.fill(); ctx.stroke();
+  ctx.fillStyle=accent; ctx.fillRect(x+5,y+3,Math.max(5,w*.07),h-6);
+  // end caps and rod
+  ctx.fillStyle='#253647'; ctx.fillRect(x+w-7,y-2,9,h+4); ctx.strokeRect(x+w-7,y-2,9,h+4);
+  ctx.fillStyle='#cbd5df'; ctx.fillRect(x+w,cy-h*.13,Math.max(extend,3),h*.26);
+  ctx.fillStyle='#e6edf3'; ctx.fillRect(x+w+Math.max(extend,3)-2,cy-h*.17,4,h*.34);
+  drawBolt(ctx,x+8,y+h*.23,2); drawBolt(ctx,x+8,y+h*.77,2);
+  // air port
+  ctx.fillStyle='#101b28'; ctx.beginPath(); ctx.arc(x+w*.62,y+2,3.2,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+}
+function drawAirHose(ctx, points, color='#16a7e0', width=3) {
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round';
+  ctx.strokeStyle='rgba(0,0,0,.35)'; ctx.lineWidth=width+2;
+  ctx.beginPath(); ctx.moveTo(points[0][0],points[0][1]);
+  for(let i=1;i<points.length;i++) ctx.lineTo(points[i][0],points[i][1]);
+  ctx.stroke(); ctx.strokeStyle=color; ctx.lineWidth=width;
+  ctx.beginPath(); ctx.moveTo(points[0][0],points[0][1]);
+  for(let i=1;i<points.length;i++) ctx.lineTo(points[i][0],points[i][1]);
+  ctx.stroke();
+  for(const [x,y] of [points[0],points[points.length-1]]) {
+    ctx.fillStyle='#dbe5ed'; ctx.beginPath(); ctx.arc(x,y,width+1,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#34485a'; ctx.beginPath(); ctx.arc(x,y,Math.max(1,width*.45),0,Math.PI*2); ctx.fill();
+  }
+  ctx.restore();
+}
+function drawSolenoidValve(ctx,x,y,w=18,h=24,active=false) {
+  ctx.save();
+  // aluminum valve body and port marks
+  let g=ctx.createLinearGradient(x,y,x+w,y+h);
+  g.addColorStop(0,'#dce5ec'); g.addColorStop(.45,'#71869a'); g.addColorStop(1,'#34485a');
+  ctx.fillStyle=g; ctx.strokeStyle='#d1dce5'; ctx.lineWidth=1;
+  ctx.fillRect(x,y+5,w,h-5); ctx.strokeRect(x,y+5,w,h-5);
+  ctx.fillStyle=active?'#f59e0b':'#172536'; ctx.fillRect(x+2,y,w-4,8);
+  ctx.strokeStyle=active?'#fde68a':'#53677a'; ctx.strokeRect(x+2,y,w-4,8);
+  ctx.fillStyle='#e5edf4';
+  for(let k=0;k<3;k++){ctx.beginPath();ctx.arc(x+w*(.25+k*.25),y+h-3,1.5,0,Math.PI*2);ctx.fill();}
+  ctx.restore();
+}
+function drawAirPrepUnit(ctx,x,y) {
+  ctx.save();
+  // filter/regulator bowl
+  ctx.fillStyle='#26384a'; ctx.strokeStyle='#9fb2c4'; ctx.lineWidth=1.2;
+  ctx.fillRect(x,y,48,17); ctx.strokeRect(x,y,48,17);
+  ctx.fillStyle='#101c2a'; ctx.fillRect(x+4,y+17,15,31); ctx.strokeRect(x+4,y+17,15,31);
+  ctx.fillStyle='rgba(70,180,230,.25)'; ctx.fillRect(x+6,y+22,11,22);
+  ctx.fillStyle='#dce6ed'; ctx.fillRect(x+26,y+18,18,27); ctx.strokeRect(x+26,y+18,18,27);
+  ctx.fillStyle='#0f1a27'; ctx.beginPath();ctx.arc(x+35,y+30,6,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#e2e8f0';ctx.beginPath();ctx.moveTo(x+35,y+30);ctx.lineTo(x+38,y+26);ctx.stroke();
+  ctx.fillStyle='#cbd5e1';ctx.fillRect(x+16,y-5,16,5);
+  ctx.fillStyle='#d1dce5';ctx.fillRect(x-5,y+5,5,7);ctx.fillRect(x+48,y+5,5,7);
+  ctx.restore();
+}
+function drawMachineBase(ctx,x,y,w,h) {
+  ctx.save();
+  // shadow
+  ctx.fillStyle='rgba(0,0,0,.4)'; ctx.beginPath(); ctx.ellipse(x+w*.5,y+h+12,w*.53,13,0,0,Math.PI*2); ctx.fill();
+  draw3DBox(ctx,x,y,w,h,42,'#243344','#7f94a8','#111c29','#52677c');
+  // front panel and fasteners
+  ctx.fillStyle='#172535'; ctx.fillRect(x+10,y+7,w-20,h-14);
+  ctx.strokeStyle='#536a7e'; ctx.lineWidth=1; ctx.strokeRect(x+10,y+7,w-20,h-14);
+  for(let bx=x+20;bx<x+w-10;bx+=Math.max(48,w/12)) { drawBolt(ctx,bx,y+4,2.6); drawBolt(ctx,bx,y+h-4,2.6); }
+  // adjustable feet
+  for(const fx of [x+35,x+w-35]) {
+    ctx.fillStyle='#0a111a'; ctx.fillRect(fx-7,y+h+3,14,12);
+    ctx.fillStyle='#8998a7'; ctx.fillRect(fx-12,y+h+13,24,5);
+    ctx.fillStyle='#d4dce4'; ctx.fillRect(fx-10,y+h+13,20,2);
+  }
+  ctx.restore();
+}
+function draw3DBox(ctx, x, y, w, h, d, fCol, tCol, sCol, stCol) {
+  const dx = d * 0.52, dy = -d * 0.36;
+  ctx.save(); ctx.lineJoin='round'; ctx.lineWidth=1.15; ctx.strokeStyle=stCol||'#1e293b';
+  // soft contact shadow
+  ctx.fillStyle='rgba(0,0,0,.2)'; ctx.beginPath(); ctx.moveTo(x+4,y+h+3);ctx.lineTo(x+w+dx+7,y+h+dy+3);ctx.lineTo(x+w+dx+7,y+h+dy+10);ctx.lineTo(x+4,y+h+10);ctx.closePath();ctx.fill();
+  // Top face with subtle highlight
+  let tg=ctx.createLinearGradient(x,y+dy,x+w+dx,y);
+  tg.addColorStop(0,tCol); tg.addColorStop(.55,'#e4ebf1'); tg.addColorStop(1,tCol);
+  ctx.fillStyle=tg; ctx.beginPath(); ctx.moveTo(x,y);ctx.lineTo(x+dx,y+dy);ctx.lineTo(x+w+dx,y+dy);ctx.lineTo(x+w,y);ctx.closePath();ctx.fill();ctx.stroke();
+  // right face
+  let sg=ctx.createLinearGradient(x+w,y,x+w+dx,y);
+  sg.addColorStop(0,sCol);sg.addColorStop(1,'#101a27');
+  ctx.fillStyle=sg;ctx.beginPath();ctx.moveTo(x+w,y);ctx.lineTo(x+w+dx,y+dy);ctx.lineTo(x+w+dx,y+h+dy);ctx.lineTo(x+w,y+h);ctx.closePath();ctx.fill();ctx.stroke();
+  // front face
+  let fg=ctx.createLinearGradient(x,y,x+w,y);
+  fg.addColorStop(0,fCol);fg.addColorStop(.45,'#ffffff15');fg.addColorStop(1,fCol);
+  ctx.fillStyle=fg;ctx.fillRect(x,y,w,h);ctx.strokeRect(x,y,w,h);
+  if(w>70 && h>12) { drawBolt(ctx,x+8,y+h/2,2.2); drawBolt(ctx,x+w-8,y+h/2,2.2); }
+  ctx.restore();
+}
+function draw3DCylinderV(ctx, cx, topY, r, h, cDark, cLight, cTop, stCol, alpha = 1) {
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  const ry = r * 0.32;
+  let grad = ctx.createLinearGradient(cx - r, topY, cx + r, topY);
+  grad.addColorStop(0, cDark); grad.addColorStop(0.35, cLight); grad.addColorStop(0.75, cDark); grad.addColorStop(1, '#090d16');
+
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.moveTo(cx - r, topY);
+  ctx.lineTo(cx - r, topY + h);
+  ctx.ellipse(cx, topY + h, r, ry, 0, Math.PI, 0, true);
+  ctx.lineTo(cx + r, topY);
+  ctx.ellipse(cx, topY, r, ry, 0, 0, Math.PI, false);
+  ctx.closePath();
+  ctx.fill();
+  if (stCol) { ctx.strokeStyle = stCol; ctx.lineWidth = 1.2; ctx.stroke(); }
+
+  ctx.fillStyle = cTop;
+  ctx.beginPath();
+  ctx.ellipse(cx, topY, r, ry, 0, 0, Math.PI * 2);
+  ctx.fill();
+  if (stCol) ctx.stroke();
+  ctx.restore();
+}
+
+function draw3DCap(ctx, cx, botY, r, h, hasGlue, hasLiner) {
+  ctx.save();
+  const topY = botY - h;
+  const inR = r - 4.5;
+  draw3DCylinderV(ctx, cx, topY, r, h, '#0f172a', '#334155', '#475569', '#64748b', 0.72);
+
+  // تجويف الغطاء
+  ctx.fillStyle = '#090d16';
+  ctx.beginPath();
+  ctx.ellipse(cx, topY, inR, inR * 0.32, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  const floorY = botY - 6;
+  if (hasGlue) {
+    ctx.fillStyle = '#facc15';
+    ctx.beginPath();
+    ctx.ellipse(cx, floorY - 1, hasLiner ? 15 : 8, (hasLiner ? 15 : 8) * 0.35, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  if (hasLiner) {
+    draw3DCylinderV(ctx, cx, floorY - 5, inR - 0.5, 4, '#cbd5e1', '#ffffff', '#ffffff', '#38bdf8', 1);
+  }
+  // شفة الـ 1 مم
+  ctx.strokeStyle = '#94a3b8';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.ellipse(cx, botY - 12, inR - 1.5, (inR - 1.5) * 0.32, 0, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.restore();
+}
+
+// =========================================================
+// تشغيل ورسم الصفحة 1: الماكينة الكاملة 3D
+// =========================================================
+const p1Canvas = document.getElementById('p1Canvas');
+const ctx1 = p1Canvas.getContext('2d');
+let p1Auto = true, p1Step = 0, p1Prog = 0;
+let p1Caps = [
+  { baseX: 880, glue: false, liner: false },
+  { baseX: 620, glue: false, liner: false },
+  { baseX: 360, glue: true,  liner: false }
+];
+
+const p1Titles = [
+  "الخطوة 1: بستم التغذية (C1) يزق الغطاء داخل مجرى حرف U",
+  "الخطوة 2: رجوع بستم التغذية ونزول غطاء جديد من المجرى الرأسية 90°",
+  "الخطوة 3: بستم الأدوس الصغير يفتح اللسان الداخلي ويقفله بسرعة فينزل نقطة غراء + خروج اللسان السحاب بالروندلة تحت الشاكوش",
+  "الخطوة 4: الشاكوش (واقف مكانه) يشفط الروندلة من اللسان السحاب بدون أن يطلع لفوق",
+  "الخطوة 5: رجوع اللسان السحاب تحت ماسورة الروندلات",
+  "الخطوة 6: نزول الشاكوش مباشرة لكبس الروندلة داخل الغطاء وتجاوز الشفة الداخلية (يحتاج تأكيداً بقياس الغطاء والروندلة) ثم طلوعه لمكانه"
+];
+
+function renderPage1() {
+  if (p1Auto) {
+    p1Prog += 0.015;
+    if (p1Prog >= 1) {
+      p1Prog = 0;
+      if (p1Step === 0) {
+        p1Caps.forEach(c => c.baseX -= 260);
+        p1Caps = p1Caps.filter(c => c.baseX >= 90);
+      }
+      if (p1Step === 1 && !p1Caps.some(c => Math.abs(c.baseX - 880) < 30)) {
+        p1Caps.push({ baseX: 880, glue: false, liner: false });
+      }
+      p1Step = (p1Step + 1) % 6;
+    }
+  }
+  document.getElementById('p1StatusText').innerText = p1Titles[p1Step];
+
+  let c1 = (p1Step === 0) ? p1Prog : (p1Step === 1 ? 1 - p1Prog : 0);
+  let glueSlide = (p1Step === 2) ? Math.sin(p1Prog * Math.PI) : 0;
+  let tPos = (p1Step === 2) ? p1Prog : (p1Step === 3 ? 1 : (p1Step === 4 ? 1 - p1Prog : 0));
+  let hPos = (p1Step === 5) ? (p1Prog < 0.55 ? p1Prog / 0.55 : 1 - (p1Prog - 0.55) / 0.45) : 0;
+  let vac = (p1Step === 3 && p1Prog > 0.2) || p1Step === 4 || (p1Step === 5 && p1Prog < 0.55);
+  let tHas = !(p1Step === 3 && p1Prog > 0.2) && p1Step !== 4;
+  let hHas = vac;
+
+  if (p1Step === 2 && p1Prog > 0.6) {
+    let gc = p1Caps.find(c => Math.abs(c.baseX - 620) < 30);
+    if (gc) gc.glue = true;
+  }
+  if (p1Step === 5 && p1Prog > 0.5) {
+    let pc = p1Caps.find(c => Math.abs(c.baseX - 360) < 30);
+    if (pc) pc.liner = true;
+  }
+
+  ctx1.clearRect(0, 0, p1Canvas.width, p1Canvas.height);
+  drawTechnicalBackground(ctx1, p1Canvas.width, p1Canvas.height);
+  ctx1.textAlign = 'center';
+  const trackY = 335;
+
+  // الشاسيه السفلي الصناعي مع أرجل تثبيت
+  drawMachineBase(ctx1, 55, 375, 1010, 27);
+  // أعمدة الهيكل وحامل المحطات
+  draw3DBox(ctx1, 115, 95, 18, 255, 42, '#34485b', '#c4d0db', '#1a2938', '#71869a');
+  draw3DBox(ctx1, 1000, 95, 18, 255, 42, '#34485b', '#c4d0db', '#1a2938', '#71869a');
+  draw3DBox(ctx1, 115, 88, 903, 15, 42, '#34485b', '#d7e0e8', '#1a2938', '#71869a');
+  // وحدة تجهيز الهواء ومشط البلوف الكهرومغناطيسية
+  drawAirPrepUnit(ctx1, 704, 128);
+  draw3DBox(ctx1, 770, 117, 120, 35, 16, '#26384a', '#9fb2c4', '#142130', '#536b80');
+  for(let vi=0;vi<5;vi++) drawSolenoidValve(ctx1,776+vi*22,119,17,29,(p1Step===vi%6));
+  // خراطيم الهواء الملونة من مشط البلوف إلى وحدات الحركة
+  drawAirHose(ctx1, [[891,128],[908,128],[908,165],[945,165],[945,230]], '#16a7e0', 2.5);
+  drawAirHose(ctx1, [[891,135],[901,135],[901,176],[653,176],[653,191]], '#eab308', 2.5);
+  drawAirHose(ctx1, [[891,142],[895,142],[895,198],[410,198],[410,215]], '#22a06b', 2.5);
+  // نبضات حركة الهواء داخل الخراطيم لتوضيح أي دائرة تعمل أثناء التتابع
+  const flowOn = p1Step === 0 || p1Step === 2 || p1Step === 3 || p1Step === 5;
+  if(flowOn) {
+    const fx = 780 + ((p1Prog * 190) % 100);
+    ctx1.save();
+    ctx1.fillStyle='#e0f2fe'; ctx1.shadowColor='#38bdf8'; ctx1.shadowBlur=7;
+    ctx1.beginPath(); ctx1.arc(fx,176,2.6,0,Math.PI*2); ctx1.fill();
+    ctx1.beginPath(); ctx1.arc(895 - ((p1Prog * 130) % 90),198,2.4,0,Math.PI*2); ctx1.fill();
+    ctx1.restore();
+  }
+  // شاسيه ومجرى حرف U 3D
+  draw3DBox(ctx1, 55, trackY + 14, 1010, 24, 65, '#1e293b', '#334155', '#0f172a', '#475569');
+  draw3DBox(ctx1, 80, trackY, 880, 14, 52, '#64748b', '#cbd5e1', '#475569', '#334155');
+
+  // الأغطية على الخط
+  p1Caps.forEach(c => {
+    let cx = c.baseX - (p1Step === 0 ? c1 * 260 : 0) + 18;
+    draw3DCap(ctx1, cx, trackY - 12, 33, 33, c.glue, c.liner);
+  });
+
+  // وحدات تشغيل نيوماتيك ظاهرة على جانب الهيكل (أسطوانات/أعمدة كروم)
+  drawCylinderAssembly(ctx1, 130, 245, 105, 28, '#b7c7d6', '#147ba9', 8 + c1 * 22);
+  drawCylinderAssembly(ctx1, 490, 255, 78, 24, '#b7c7d6', '#147ba9', 5 + tPos * 20);
+  // fittings, flow controls and short pneumatic lines on the visible cylinders
+  drawAirHose(ctx1, [[184,244],[184,229],[165,229],[165,215]], '#16a7e0', 2.2);
+  drawAirHose(ctx1, [[540,254],[540,235],[522,235],[522,221]], '#eab308', 2.2);
+  drawBolt(ctx1,239,259,3); drawBolt(ctx1,239,269,3);
+  // 1. محطة التغذية الرأسية (يمين X=880)
+  const chX = 898;
+  draw3DBox(ctx1, chX - 40, 75, 8, 200, 40, '#64748b', '#94a3b8', '#475569', '#1e293b');
+  draw3DBox(ctx1, chX + 32, 75, 8, 200, 40, '#64748b', '#94a3b8', '#475569', '#1e293b');
+  for (let i = 0; i < 4; i++) draw3DCap(ctx1, chX + 6, 265 - i * 40, 33, 33, false, false);
+  draw3DBox(ctx1, 975, trackY - 36, 110, 30, 32, '#0284c7', '#38bdf8', '#0369a1', '#1e293b');
+  draw3DBox(ctx1, 930 - c1 * 85, trackY - 36, 45, 32, 36, '#f59e0b', '#fde047', '#d97706', '#78350f');
+  ctx1.fillStyle = '#facc15'; ctx1.font = 'bold 12px Segoe UI';
+  ctx1.fillText('1. مجرى 90° + بستم الزق', chX + 20, 48);
+
+  // 2. محطة أدوس الغراء باللسان الداخلي والبستم الصغير (المنتصف X=620)
+  const gx = 638;
+  draw3DCylinderV(ctx1, gx, 85, 32, 80, '#0369a1', '#38bdf8', '#7dd3fc', '#0284c7', 1);
+  // بيت اللسان الداخلي أسفل الأدوس + البستم الصغير
+  draw3DBox(ctx1, gx - 28, 165, 56, 18, 28, '#cbd5e1', '#ffffff', '#94a3b8', '#475569');
+  // اللسان الداخلي يتحرك ببستم صغير
+  draw3DBox(ctx1, gx + 25 + glueSlide * 18, 167, 45, 14, 22, '#f59e0b', '#fde047', '#d97706', '#78350f');
+  draw3DBox(ctx1, gx + 75, 163, 55, 22, 24, '#0284c7', '#38bdf8', '#0369a1', '#1e293b');
+  ctx1.fillStyle = '#facc15';
+  ctx1.fillText('2. أدوس الغراء بلسان داخلي وبستم صغير', gx + 25, 62);
+  if (p1Step === 2 && p1Prog > 0.2 && p1Prog < 0.8) {
+    ctx1.fillStyle = '#facc15';
+    ctx1.beginPath(); ctx1.arc(gx, 190 + p1Prog * 110, 6.5, 0, Math.PI * 2); ctx1.fill();
+  }
+
+  // 3. محطة الماسورة + اللسان السحاب + الشاكوش الثابت (يسار X=360)
+  const px = 378, mx = 228, ty = 222;
+  const curPocketX = mx + tPos * (px - mx);
+  // بستم اللسان السحاب
+  draw3DBox(ctx1, 45, ty - 6, 90, 22, 28, '#0284c7', '#38bdf8', '#0369a1', '#1e293b');
+  // اللسان السحاب
+  draw3DBox(ctx1, curPocketX - 160, ty, 200, 10, 44, '#64748b', '#cbd5e1', '#475569', '#1e293b');
+  if (tHas) draw3DCylinderV(ctx1, curPocketX + 10, ty - 8, 25, 4, '#cbd5e1', '#ffffff', '#ffffff', '#facc15', 1);
+
+  // الماسورة فوق اللسان
+  for (let r = 0; r < 10; r++) draw3DCylinderV(ctx1, mx + 10, ty - 14 - r * 9, 25, 4, '#94a3b8', '#f8fafc', '#e2e8f0', '#64748b', 1);
+  draw3DCylinderV(ctx1, mx + 10, 88, 29, 125, '#0284c7', '#38bdf8', '#7dd3fc', '#38bdf8', 0.28);
+  ctx1.fillStyle = '#38bdf8'; ctx1.fillText('3. ماسورة الروندلات واللسان', mx + 10, 65);
+
+  // الشاكوش الثابت فوق اللسان وينزل للكبس
+  draw3DBox(ctx1, px - 16, 48, 36, 85, 34, '#475569', '#94a3b8', '#334155', '#1e293b');
+  const hamY = 192 + hPos * 98;
+  draw3DCylinderV(ctx1, px + 8, 133, 7, hamY - 133, '#94a3b8', '#f8fafc', '#e2e8f0', '#475569', 1);
+  if (hHas) draw3DCylinderV(ctx1, px + 8, hamY + 20, 25, 4, '#cbd5e1', '#ffffff', '#ffffff', '#22c55e', 1);
+  draw3DCylinderV(ctx1, px + 8, hamY, 26, 20, vac ? '#15803d' : '#1e293b', vac ? '#4ade80' : '#94a3b8', vac ? '#22c55e' : '#64748b', '#cbd5e1', 1);
+  ctx1.fillStyle = '#facc15'; ctx1.fillText('4. الشاكوش الثابت بالشفط', px + 10, 32);
+}
+
+// =========================================================
+// تشغيل ورسم الصفحة 2: أدوس الغراء باللسان الداخلي والبستم الصغير
+// =========================================================
+const p2Canvas = document.getElementById('p2Canvas');
+const ctx2 = p2Canvas.getContext('2d');
+let p2Mode = 'auto', p2Sub = 1, p2Timer = 0;
+
+function renderPage2() {
+  if (p2Mode === 'auto') {
+    p2Timer = (p2Timer + 0.006) % 1.0;
+    p2Sub = (p2Timer < 0.35) ? 1 : (p2Timer < 0.68 ? 2 : 3);
+  }
+  highlightBoxes('p2Box', p2Sub);
+
+  ctx2.clearRect(0, 0, p2Canvas.width, p2Canvas.height);
+  drawTechnicalBackground(ctx2, p2Canvas.width, p2Canvas.height);
+  ctx2.textAlign = 'center';
+
+  const cx = 260;
+  // حساب إزاحة اللسان الداخلي: في الوضع 2 (فتح سريع) يتطابق ثقب اللسان مع ثقب الأدوس
+  let slideOpen = (p2Sub === 2) ? 1 : 0;
+
+  // 1. خزان الأدوس العلوي المملوء بالغراء
+  ctx2.fillStyle = '#1e293b';
+  ctx2.strokeStyle = '#94a3b8';
+  ctx2.lineWidth = 3;
+  ctx2.beginPath();
+  ctx2.moveTo(cx - 85, 35);
+  ctx2.lineTo(cx + 85, 35);
+  ctx2.lineTo(cx + 42, 165);
+  ctx2.lineTo(cx - 42, 165);
+  ctx2.closePath();
+  ctx2.fill(); ctx2.stroke();
+
+  // خامة الغراء داخل الأدوس
+  ctx2.fillStyle = '#eab308';
+  ctx2.beginPath();
+  ctx2.moveTo(cx - 75, 58);
+  ctx2.lineTo(cx + 75, 58);
+  ctx2.lineTo(cx + 39, 163);
+  ctx2.lineTo(cx - 39, 163);
+  ctx2.closePath();
+  ctx2.fill();
+  ctx2.fillStyle = '#090d16'; ctx2.font = 'bold 14px Segoe UI';
+  ctx2.fillText('خامة الغراء داخل الأدوس', cx, 110);
+
+  // 2. بيت اللسان السفلي (من التفلون الأبيض) الراكب في قاع الأدوس
+  ctx2.fillStyle = '#cbd5e1';
+  ctx2.strokeStyle = '#475569';
+  ctx2.lineWidth = 2;
+  ctx2.fillRect(cx - 65, 165, 130, 48);
+  ctx2.strokeRect(cx - 65, 165, 130, 48);
+
+  // مجرى الغراء العلوي والسفلي (قطر 4 مم) في سنتر الأدوس
+  ctx2.fillStyle = '#eab308';
+  ctx2.fillRect(cx - 9, 162, 18, 18); // الفتحة العلوية دائماً فيها غراء
+  ctx2.fillStyle = '#090d16';
+  ctx2.fillRect(cx - 9, 194, 18, 22); // الفوهة السفلية
+
+  // أورينج كاوتش مانع للتسريب حول الفتحة
+  ctx2.fillStyle = '#dc2626';
+  ctx2.fillRect(cx - 16, 174, 6, 5);
+  ctx2.fillRect(cx + 10, 174, 6, 5);
+
+  // 3. اللسان الداخلي المتحرك (التفلون) المتصل بالبستم الصغير على اليمين
+  // عندما slideOpen = 0 يكون الثقب مرحلاً لليمين واللسان قافل الفتحة، وعندما slideOpen = 1 يجي الثقب في السنتر cx
+  const holeCenterX = (cx + 38) - slideOpen * 38;
+  const tongueLeft = holeCenterX - 75;
+
+  ctx2.fillStyle = '#38bdf8';
+  ctx2.strokeStyle = '#0284c7';
+  ctx2.lineWidth = 2;
+  ctx2.fillRect(tongueLeft, 179, 165, 16);
+  ctx2.strokeRect(tongueLeft, 179, 165, 16);
+
+  // ثقب اللسان الداخلي (قطر 4 مم)
+  ctx2.fillStyle = (slideOpen === 1) ? '#facc15' : '#090d16';
+  ctx2.fillRect(holeCenterX - 9, 178, 18, 18);
+
+  ctx2.fillStyle = '#090d16'; ctx2.font = 'bold 11px Segoe UI';
+  ctx2.fillText('اللسان الداخلي', holeCenterX - 42, 191);
+
+  // 4. البستم النيوماتيكي الصغير جداً (MAL 16x15) الذي يحرك اللسان الداخلي
+  const cylX = 435;
+  // ذراع البستم الصغير
+  ctx2.fillStyle = '#e2e8f0';
+  ctx2.fillRect(tongueLeft + 165, 183, cylX - (tongueLeft + 165), 8);
+  // جسم البستم الصغير
+  ctx2.fillStyle = (slideOpen === 1) ? '#16a34a' : '#0284c7';
+  ctx2.strokeStyle = '#bae6fd';
+  ctx2.fillRect(cylX, 168, 125, 38);
+  ctx2.strokeRect(cylX, 168, 125, 38);
+  ctx2.fillStyle = '#fff'; ctx2.font = 'bold 12px Segoe UI';
+  ctx2.fillText('بستم صغير (MAL 16x15)', cylX + 62, 191);
+  ctx2.fillStyle = '#facc15';
+  ctx2.fillText(slideOpen === 1 ? '⬅ يفتح اللسان (0.2 ثانية)' : '➡ قافل اللسان بإحكام', cylX + 62, 156);
+
+  // 5. نزول نقطة الغراء في الغطاء وقص الخيط
+  const capY = 345;
+  draw3DCap(ctx2, cx, capY, 45, 42, p2Sub >= 2, false);
+
+  if (p2Sub === 2) {
+    // لحظة الفتح ونزول نقطة الغراء من ثقب اللسان
+    ctx2.fillStyle = '#facc15';
+    ctx2.fillRect(cx - 7, 194, 14, 24);
+    ctx2.beginPath();
+    ctx2.arc(cx, 255, 9, 0, Math.PI * 2);
+    ctx2.fill();
+    ctx2.fillStyle = '#4ade80'; ctx2.font = 'bold 13px Segoe UI';
+    ctx2.fillText('ثقب اللسان تطابق مع الأدوس ⬅ نزول نقطة واحدة محددة', cx, 382);
+  } else if (p2Sub === 3) {
+    ctx2.fillStyle = '#4ade80'; ctx2.font = 'bold 13px Segoe UI';
+    ctx2.fillText('اللسان قفل فوراً وقص خيط الغراء كالمقص (ممنوع يسيل)', cx, 382);
+  } else {
+    ctx2.fillStyle = '#38bdf8'; ctx2.font = 'bold 13px Segoe UI';
+    ctx2.fillText('اللسان الداخلي سادد فتحة الأدوس تماماً في وضع الاستعداد', cx, 382);
+  }
+}
+
+// =========================================================
+// تشغيل ورسم الصفحة 3: ماسورة الروندلات واللسان السحاب
+// =========================================================
+const p3Canvas = document.getElementById('p3Canvas');
+const ctx3 = p3Canvas.getContext('2d');
+let p3Mode = 'auto', p3Sub = 1, p3Timer = 0;
+
+function renderPage3() {
+  if (p3Mode === 'auto') {
+    p3Timer = (p3Timer + 0.005) % 1.0;
+    p3Sub = (p3Timer < 0.33) ? 1 : (p3Timer < 0.66 ? 2 : 3);
+  }
+  highlightBoxes('p3Box', p3Sub);
+
+  ctx3.clearRect(0, 0, p3Canvas.width, p3Canvas.height);
+  drawTechnicalBackground(ctx3, p3Canvas.width, p3Canvas.height);
+  ctx3.textAlign = 'center';
+
+  let slide = (p3Sub === 1) ? 0 : (p3Sub === 2 ? 1 : 0.25);
+  const magX = 240, ty = 265;
+  const pocketX = magX + slide * 185;
+
+  // بستم اللسان السحاب (TN 16x75)
+  draw3DBox(ctx3, 25, ty - 8, 105, 28, 30, '#0284c7', '#38bdf8', '#0369a1', '#1e293b');
+
+  // جسم اللسان السحاب 3D
+  draw3DBox(ctx3, pocketX - 210, ty, 275, 16, 52, '#64748b', '#cbd5e1', '#475569', '#1e293b');
+
+  // الجيب المحفور في اللسان (عمق 0.4 مم) + ثقب التهوية (6 مم)
+  ctx3.fillStyle = '#090d16';
+  ctx3.beginPath();
+  ctx3.ellipse(pocketX + 20, ty - 8, 38, 13, 0, 0, Math.PI * 2);
+  ctx3.fill();
+
+  // الروندلة المسحوبة داخل الجيب (37 مم × 0.5 مم)
+  if (p3Sub !== 3) {
+    draw3DCylinderV(ctx3, pocketX + 20, ty - 13, 36, 6, '#eab308', '#fef08a', '#facc15', '#ca8a04', 1);
+  }
+
+  // الروندلات داخل الماسورة الرأسية
+  for (let i = 0; i < 10; i++) {
+    draw3DCylinderV(ctx3, magX + 20, ty - 20 - i * 14, 36, 6, '#94a3b8', '#ffffff', '#e2e8f0', '#475569', 1);
+  }
+  // الماسورة الشفافة فوق اللسان
+  draw3DCylinderV(ctx3, magX + 20, 62, 42, 190, '#0284c7', '#38bdf8', '#7dd3fc', '#38bdf8', 0.28);
+
+  ctx3.fillStyle = '#facc15'; ctx3.font = 'bold 14px Segoe UI';
+  ctx3.fillText('ماسورة خزنة الروندلات (قطر داخلي 37.5 مم)', magX + 20, 38);
+  ctx3.fillStyle = '#4ade80';
+  ctx3.fillText('جيب اللسان المحفور (عمق 0.4 مم) يسحب روندلة واحدة ويقفل الماسورة بظهره', 330, 355);
+}
+
+// =========================================================
+// تشغيل ورسم الصفحة 4: الشاكوش الثابت بالشفط والكبس
+// =========================================================
+const p4Canvas = document.getElementById('p4Canvas');
+const ctx4 = p4Canvas.getContext('2d');
+let p4Mode = 'auto', p4Sub = 1, p4Timer = 0;
+
+function renderPage4() {
+  if (p4Mode === 'auto') {
+    p4Timer = (p4Timer + 0.005) % 1.0;
+    p4Sub = (p4Timer < 0.33) ? 1 : (p4Timer < 0.66 ? 2 : 3);
+  }
+  highlightBoxes('p4Box', p4Sub);
+
+  ctx4.clearRect(0, 0, p4Canvas.width, p4Canvas.height);
+  drawTechnicalBackground(ctx4, p4Canvas.width, p4Canvas.height);
+  ctx4.textAlign = 'center';
+
+  const cx = 360;
+  const waitY = 148; // مكان وقوف الشاكوش الثابت فوق اللسان مباشرة!
+  let tPos = (p4Sub === 1) ? 1 : 0;
+  let hamY = (p4Sub === 3) ? 255 : waitY; // لا يطلع لفوق أبداً عند الشفط؛ ثابت في waitY ثم ينزل لـ 255!
+  let vac = (p4Sub === 2 || p4Sub === 3);
+
+  // الغطاء في الأسفل
+  draw3DCap(ctx4, cx, 325, 48, 46, true, p4Sub === 3);
+
+  // اللسان السحاب يدخل تحت الشاكوش الثابت
+  const pocketX = 120 + tPos * (cx - 120);
+  draw3DBox(ctx4, pocketX - 150, 182, 210, 14, 48, '#64748b', '#cbd5e1', '#475569', '#1e293b');
+  if (p4Sub === 1) {
+    draw3DCylinderV(ctx4, pocketX, 175, 36, 6, '#cbd5e1', '#ffffff', '#ffffff', '#facc15', 1);
+  }
+
+  // بستم الشاكوش وذراعه
+  draw3DBox(ctx4, cx - 26, 22, 52, 75, 38, '#475569', '#94a3b8', '#334155', '#1e293b');
+  draw3DCylinderV(ctx4, cx, 97, 10, hamY - 97, '#94a3b8', '#f8fafc', '#e2e8f0', '#475569', 1);
+
+  // الروندلة الملتقطة بالشفط أسفل الشاكوش
+  if (p4Sub === 2) {
+    draw3DCylinderV(ctx4, cx, hamY + 26, 36, 6, '#cbd5e1', '#ffffff', '#ffffff', '#22c55e', 1);
+  }
+
+  // رأس الشاكوش الحديد (قطر 36.4 مم)
+  draw3DCylinderV(ctx4, cx, hamY, 37, 26, vac ? '#15803d' : '#1e293b', vac ? '#4ade80' : '#94a3b8', vac ? '#22c55e' : '#64748b', '#cbd5e1', 1);
+
+  ctx4.fillStyle = '#facc15'; ctx4.font = 'bold 14px Segoe UI';
+  ctx4.fillText(
+    p4Sub === 1 ? '1. الشاكوش واقف مظبوط في مكانه واللسان يدخل تحته مباشرة' :
+    (p4Sub === 2 ? '2. الشاكوش يشفط الروندلة وهو واقف في مكانه واللسان يرجع للخزنة' :
+    '3. نزول الشاكوش مباشرة لكبس الروندلة وتجاوز الشفة الداخلية (يحتاج تأكيداً بقياس الغطاء والروندلة) ثم العودة لمكانه'),
+    330, 375
+  );
+}
+
+// =========================================================
+// تشغيل ورسم الصفحة 5: المجرى الرأسية 90° وبستم الزق
+// =========================================================
+const p5Canvas = document.getElementById('p5Canvas');
+const ctx5 = p5Canvas.getContext('2d');
+let p5Mode = 'auto', p5Sub = 1, p5Timer = 0;
+
+function renderPage5() {
+  if (p5Mode === 'auto') {
+    p5Timer = (p5Timer + 0.005) % 1.0;
+    p5Sub = (p5Timer < 0.33) ? 1 : (p5Timer < 0.66 ? 2 : 3);
+  }
+  highlightBoxes('p5Box', p5Sub);
+
+  ctx5.clearRect(0, 0, p5Canvas.width, p5Canvas.height);
+  drawTechnicalBackground(ctx5, p5Canvas.width, p5Canvas.height);
+  ctx5.textAlign = 'center';
+
+  const trackY = 305, chX = 350;
+  let push = (p5Sub === 2) ? 1 : 0;
+
+  // مجرى حرف U
+  draw3DBox(ctx5, 50, trackY, 550, 16, 52, '#64748b', '#cbd5e1', '#475569', '#1e293b');
+
+  // الغطاء الساقط والمدفوع
+  const capX = chX - (p5Sub === 2 ? 150 : (p5Sub === 3 ? 150 : 0));
+  draw3DCap(ctx5, capX, trackY - 12, 38, 38, false, false);
+
+  // المجرى الرأسية 90° والأغطية فوقها
+  draw3DBox(ctx5, chX - 45, 55, 9, 195, 42, '#64748b', '#94a3b8', '#475569', '#1e293b');
+  draw3DBox(ctx5, chX + 36, 55, 9, 195, 42, '#64748b', '#94a3b8', '#475569', '#1e293b');
+  for (let i = 0; i < 3; i++) draw3DCap(ctx5, chX, 235 - i * 46, 38, 38, false, false);
+
+  // بستم الزق وبلوكة التفلون
+  draw3DBox(ctx5, 470, trackY - 42, 130, 34, 36, '#0284c7', '#38bdf8', '#0369a1', '#1e293b');
+  const blockX = 410 - push * 115;
+  draw3DBox(ctx5, blockX, trackY - 42, 60, 36, 40, '#f59e0b', '#fde047', '#d97706', '#78350f');
+
+  ctx5.fillStyle = '#facc15'; ctx5.font = 'bold 14px Segoe UI';
+  ctx5.fillText('بلوكة البستم تزق الغطاء السفلي وظهرها يحجز الأغطية العلوية حتى يرجع البستم', 330, 365);
+}
+
+// =========================================================
+// تشغيل ورسم الصفحة 6: مخطط توصيل الهواء والكهرباء
+// =========================================================
+const p6Canvas = document.getElementById('p6Canvas');
+const ctx6 = p6Canvas.getContext('2d');
+let p6Auto = true, p6Step = 0, p6Timer = 0;
+
+function renderPage6() {
+  if (p6Auto) {
+    p6Timer += 0.007;
+    if (p6Timer >= 1) { p6Timer = 0; p6Step = (p6Step + 1) % 5; }
+  }
+
+  ctx6.clearRect(0, 0, p6Canvas.width, p6Canvas.height);
+  drawTechnicalBackground(ctx6, p6Canvas.width, p6Canvas.height);
+  ctx6.textAlign = 'center';
+
+  const v1 = (p6Step === 0);
+  const v2 = (p6Step === 1);
+  const v3 = (p6Step === 1 || p6Step === 2);
+  const v4 = (p6Step === 4);
+  const v5 = (p6Step === 2 || p6Step === 3 || p6Step === 4);
+
+  // 1. الباورات 24V DC والكنترول (يمين)
+  ctx6.fillStyle = '#0f172a'; ctx6.strokeStyle = '#facc15'; ctx6.lineWidth = 2;
+  ctx6.fillRect(860, 30, 230, 110); ctx6.strokeRect(860, 30, 230, 110);
+  ctx6.fillStyle = '#facc15'; ctx6.font = 'bold 14px Segoe UI';
+  ctx6.fillText('الباورات (Power Supply 24V DC)', 975, 60);
+  ctx6.fillStyle = '#4ade80'; ctx6.font = 'bold 13px Consolas';
+  ctx6.fillText('+24V DC  |  0V (COM)', 975, 95);
+
+  ctx6.fillStyle = '#0f172a'; ctx6.strokeStyle = '#38bdf8';
+  ctx6.fillRect(860, 170, 230, 245); ctx6.strokeRect(860, 170, 230, 245);
+  ctx6.fillStyle = '#38bdf8'; ctx6.font = 'bold 14px Segoe UI';
+  ctx6.fillText('لوحة الكنترول / الريليهات والتايمرات', 975, 198);
+
+  // 2. مشط البلوف الـ 5 (منتصف)
+  ctx6.fillStyle = '#1e293b'; ctx6.strokeStyle = '#94a3b8';
+  ctx6.fillRect(490, 170, 270, 245); ctx6.strokeRect(490, 170, 270, 245);
+  ctx6.fillStyle = '#facc15';
+  ctx6.fillText('مشط بلوف الهواء (5 بلوف 24V DC)', 625, 198);
+
+  const items = [
+    { v: 'بلف V1 (4V210)', act: '1. بستم زق الغطاء (MAL 20x50)', on: v1, y: 235 },
+    { v: 'بلف V2 (4V210)', act: '2. بستم لسان الغراء الداخلي (MAL 16x15)', on: v2, y: 275 },
+    { v: 'بلف V3 (4V210)', act: '3. بستم اللسان السحاب للروندلة (TN 16x75)', on: v3, y: 315 },
+    { v: 'بلف V4 (4V210)', act: '4. بستم الشاكوش الرأسي (SDA 25x40)', on: v4, y: 355 },
+    { v: 'بلف V5 (3V210)', act: '5. بلف شفط الشاكوش (Vacuum ZH07BS)', on: v5, y: 395 }
+  ];
+
+  items.forEach(it => {
+    // سلك الكهرباء من الكنترول للبلف
+    ctx6.strokeStyle = it.on ? '#ef4444' : '#334155';
+    ctx6.lineWidth = it.on ? 3 : 1.5;
+    ctx6.beginPath(); ctx6.moveTo(860, it.y); ctx6.lineTo(745, it.y); ctx6.stroke();
+
+    // البلف
+    ctx6.fillStyle = it.on ? '#0284c7' : '#090d16';
+    ctx6.fillRect(505, it.y - 14, 240, 28);
+    ctx6.strokeStyle = it.on ? '#38bdf8' : '#475569';
+    ctx6.strokeRect(505, it.y - 14, 240, 28);
+    ctx6.fillStyle = '#fff'; ctx6.font = 'bold 12px Segoe UI';
+    ctx6.fillText(it.v, 625, it.y + 4);
+
+    // خرطوم الهواء للبستم
+    ctx6.strokeStyle = it.on ? '#22c55e' : '#334155';
+    ctx6.lineWidth = it.on ? 3.5 : 1.5;
+    ctx6.beginPath(); ctx6.moveTo(505, it.y); ctx6.lineTo(380, it.y); ctx6.stroke();
+
+    // البستم (يسار)
+    ctx6.fillStyle = it.on ? 'rgba(22, 163, 74, 0.2)' : '#0f172a';
+    ctx6.strokeStyle = it.on ? '#22c55e' : '#475569';
+    ctx6.fillRect(35, it.y - 15, 345, 30);
+    ctx6.strokeRect(35, it.y - 15, 345, 30);
+    ctx6.fillStyle = it.on ? '#4ade80' : '#cbd5e1';
+    ctx6.fillText(it.act, 207, it.y + 4);
+  });
+}
+
+// حلقة التشغيل الرئيسية
+function masterLoop() {
+  if (document.hidden) { requestAnimationFrame(masterLoop); return; }
+  if (currentPage === 0) renderPage1();
+  if (currentPage === 1) renderPage2();
+  if (currentPage === 2) renderPage3();
+  if (currentPage === 3) renderPage4();
+  if (currentPage === 4) renderPage5();
+  if (currentPage === 5) renderPage6();
+  requestAnimationFrame(masterLoop);
+}
+
+masterLoop();
+</script>
+</body>
+</html>
