@@ -1,0 +1,12 @@
+exclude:
+  - app/
+  - docs/
+  - scripts/
+  - README.md
+  - TODO.md
+  - plan.md
+  - package.json
+  - pnpm-lock.yaml
+  - pnpm-workspace.yaml
+  - tsconfig.json
+  - vite.config.ts

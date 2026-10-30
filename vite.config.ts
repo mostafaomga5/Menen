@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  root: 'app',
+  publicDir: 'public',
   base: './',
   server: {
     host: '0.0.0.0',
@@ -9,6 +11,8 @@ export default defineConfig({
     allowedHosts: ['.manus.computer'],
   },
   build: {
+    outDir: '../dist',
+    emptyOutDir: true,
     chunkSizeWarningLimit: 650,
   },
 });

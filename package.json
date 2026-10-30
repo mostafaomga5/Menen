@@ -6,7 +6,7 @@
   "packageManager": "pnpm@11.25.0",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 3000",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && node scripts/publish-root.mjs",
     "preview": "vite preview --host 0.0.0.0"
   },
   "dependencies": {

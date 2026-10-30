@@ -34,7 +34,7 @@
 
 ## التنفيذ التقني والتسليم
 
-- موقع ثابت عربي RTL مبني بـ TypeScript وVite وThree.js، بلا تسجيل دخول أو خادم أو قاعدة بيانات.
+- موقع ثابت عربي RTL مبني بـ TypeScript وVite وThree.js؛ مصدر التطبيق في `app/` ويُبنى إلى `dist/` ثم تُنسخ الملفات العامة إلى جذر المستودع كي يعمل GitHub Pages من `main/(root)` بلا Actions. يستبعد `_config.yml` مجلد الشفرة والوثائق من الموقع العام. لا تسجيل دخول أو خادم أو قاعدة بيانات.
 - تخزين إعداد المستخدم محليًا في المتصفح مع تصدير/استيراد JSON؛ لا ترفع الأبعاد أو الملفات إلى خدمة خارجية.
 - تنظيم الملفات إلى مشهد 3D، نموذج أبعاد المشروع، تخطيط المحطات، منطق الحركة التعليمي، المخططات، المحتوى العربي، والواجهة.
 - تسليم README عربي لتثبيت وتشغيل المشروع، شرح الملفات، ورفعها يدويًا إلى GitHub. ملفات المصدر تكون قابلة للتنزيل/النسخ ولا تشمل بيانات مستخدم محفوظة.
@@ -59,21 +59,19 @@
 
 ```text
 machine3d/
-├── index.html
+├── index.html / assets/             # مخرجات الموقع المترجمة لـ GitHub Pages
+├── _config.yml                       # يستبعد مصادر المشروع وملفاته الداخلية من النشر العام
 ├── package.json / pnpm-lock.yaml / pnpm-workspace.yaml
 ├── README.md
 ├── plan.md / TODO.md
-├── public/manus-routes.json
-├── public/favicon.svg
+├── app/
+│   ├── index.html                    # مدخل Vite المصدر
+│   ├── public/manus-routes.json / favicon.svg
+│   └── src/                          # TypeScript والأنماط والمشهد والمحاكاة
+├── scripts/publish-root.mjs          # نسخ المخرجات العامة من dist إلى الجذر
 ├── docs/Machine_Project_M01.md
 ├── docs/limits-and-decisions.md
 ├── vite.config.ts
-└── src/
-    ├── main.ts / styles.css   # واجهة RTL ومنطق الإدخال والتصدير
-    ├── model/project.ts       # الأجزاء والقياسات والتنبيهات والمراجعة الأولية
-    ├── scene/Workbench3D.ts   # هندسة Three.js والتخطيطات والتحديد والحركة
-    ├── simulation/cycle.ts    # تسلسل التشغيل التعليمي
-    └── ui/diagrams.ts         # المخططات الوظيفية للهواء والتحكم
 ```
 
 ## البيانات التي ترفع دقة المجسم لاحقًا
