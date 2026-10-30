@@ -2,135 +2,153 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#09121d" />
-    <meta name="description" content="استوديو تصميم تعليمي تفاعلي لماكينة تركيب الروندلة M-01. أدخل القياسات واستكشف تصورًا ثلاثي الأبعاد وخيارات التخطيط." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#08111b" />
+    <meta name="description" content="استوديو عربي للتصميم الميكانيكي المباشر ثلاثي الأبعاد ومحاكاة حركة M-01 مع حدود هندسية واضحة." />
+    <title>استوديو التصميم الميكانيكي M-01</title>
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <title>استوديو تصميم ماكينة M-01</title>
-    <script type="module" crossorigin src="./assets/index-DdOG_CBT.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-GfoLrMEr.css">
+    <script type="module" crossorigin src="./assets/index-BBPRlDl8.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DYpALwEz.css">
   </head>
   <body>
     <div id="app">
       <header class="topbar">
-        <a class="brand" href="#design" aria-label="استوديو M-01">
+        <a class="brand" href="#" aria-label="استوديو M-01">
           <span class="brand-mark" aria-hidden="true"><i></i><b></b><em></em></span>
-          <span><strong>ورشة M-01</strong><small>استوديو تصميم تفاعلي</small></span>
+          <span><strong>استوديو التصميم الميكانيكي</strong><small>M-01 · محرر بارامتري ومحاكاة تعليمية</small></span>
         </a>
-        <div class="header-context"><span class="live-dot"></span><span>المشروع في مرحلة التصور والقياس</span></div>
+        <div class="project-name-wrap"><label for="project-name">اسم المشروع</label><input id="project-name" value="M-01 · ترتيب حركي مفاهيمي" maxlength="120" /></div>
         <div class="header-actions">
-          <button class="button button-quiet" id="save-project" type="button" title="حفظ الإعداد محليًا">حفظ محلي</button>
-          <button class="button button-outline" id="export-project" type="button">تصدير JSON</button>
-          <label class="button button-quiet file-button" for="import-project">استيراد<input id="import-project" type="file" accept="application/json,.json" /></label>
+          <button class="button button-quiet" id="new-project" type="button">مشروع فارغ</button>
+          <button class="button button-outline" id="load-m01" type="button">قالب M-01</button>
+          <button class="icon-button" id="undo" type="button" title="تراجع" aria-label="تراجع">↶</button>
+          <button class="icon-button" id="redo" type="button" title="إعادة" aria-label="إعادة">↷</button>
+          <button class="button button-primary" id="save-project" type="button">حفظ محلي</button>
+          <button class="button button-quiet" id="export-project" type="button">تصدير JSON</button>
+          <label class="button button-quiet file-button">فتح JSON<input id="import-project" type="file" accept="application/json,.json" /></label>
         </div>
       </header>
 
-      <nav class="main-nav" aria-label="أقسام المشروع">
-        <button class="nav-tab active" data-view="design" type="button"><span>01</span> مساحة التصميم</button>
-        <button class="nav-tab" data-view="cycle" type="button"><span>02</span> دورة التشغيل</button>
-        <button class="nav-tab" data-view="pneumatic" type="button"><span>03</span> الهواء والتحكم</button>
-        <button class="nav-tab" data-view="parts" type="button"><span>04</span> الأجزاء والقرارات</button>
+      <div class="scope-strip" role="note"><strong>توضيح هندسي:</strong><span>القطع الافتراضية تمثيلية حتى تدخل قياساتك. التصادمات تخص المصادمات المبسطة المعروضة فقط؛ الموقع ليس CAD/CAE معتمدًا، ولا يتصل بـ PLC أو آلة حقيقية.</span><a href="#engineering-notes" data-open-panel="reference">حدود المحاكاة</a></div>
+
+      <nav class="panel-tabs" aria-label="مساحات العمل">
+        <button class="panel-tab active" type="button" data-panel="design-panel">01 · التصميم المباشر</button>
+        <button class="panel-tab" type="button" data-panel="simulation-panel">02 · الحركة وPLC افتراضي</button>
+        <button class="panel-tab" type="button" data-panel="reference-panel">03 · دليل القطع والسلامة</button>
+        <span class="orientation-tip">على الهاتف: أدره أفقيًا لمساحة التحرير.</span>
       </nav>
 
       <main>
-        <section class="view active" id="view-design" aria-labelledby="design-title">
-          <div class="page-heading">
-            <div><div class="eyebrow">M-01 / CONCEPT WORKBENCH</div><h1 id="design-title">ابدأ من العينة، وابنِ تصور الماكينة</h1><p>أدخل ما قسته بنفسك. القياسات الفارغة تبقى غير محسومة ولا تُستبدل بأرقام مخترعة.</p></div>
-            <div class="readiness-chip"><span class="status-dot status-amber"></span><span id="readiness-label">بيانات المنتج لم تُدخل بعد</span></div>
+        <section class="workbench-shell" aria-label="محرر ثلاثي الأبعاد">
+          <div class="viewport-card panel">
+            <div class="viewport-toolbar">
+              <div><span class="panel-kicker">3D ASSEMBLY / TOUCH TO SELECT</span><strong id="viewport-title">مشهد الماكينة</strong></div>
+              <div class="tool-group" role="group" aria-label="أداة التحويل">
+                <button class="tool-button active" data-mode="translate" type="button" title="تحريك">تحريك</button>
+                <button class="tool-button" data-mode="rotate" type="button" title="دوران">دوران</button>
+                <button class="tool-button" data-mode="scale" type="button" title="تحجيم">تحجيم</button>
+              </div>
+              <div class="camera-group" role="group" aria-label="زاوية الكاميرا">
+                <button class="small-button" data-camera="iso" type="button">3D</button>
+                <button class="small-button" data-camera="front" type="button">أمامي</button>
+                <button class="small-button" data-camera="top" type="button">علوي</button>
+                <button class="small-button" id="reset-camera" type="button">إعادة الكاميرا</button>
+              </div>
+            </div>
+            <div class="viewport-frame" id="viewport-frame">
+              <div id="viewport-mount"></div>
+              <div class="viewport-badge"><span id="physics-led" class="status-led amber"></span><span id="physics-status">تهيئة مصادمات Rapier/WASM…</span></div>
+              <div class="viewport-help"><span>لمسة/نقرة: تحديد</span><span>سحب: تحريك المحور</span><span>إصبعان: تكبير/تحريك الكاميرا</span></div>
+              <div class="viewport-corner-actions">
+                <button class="small-button" data-camera="iso" type="button">Isometric</button>
+                <button class="small-button" id="capture-video" type="button">تسجيل WebM</button>
+              </div>
+              <div class="canvas-empty" id="canvas-empty" hidden>المشهد فارغ — أضف قطعة من المكتبة.</div>
+            </div>
+            <div class="viewport-footer"><span id="selected-summary">اختر جزءًا من المجسم لعرض خصائصه</span><span id="collision-status" class="collision-status">لا توجد عوائق مرصودة في الخطوة الحالية</span></div>
           </div>
-          <div class="notice notice-warning"><strong>نموذج تصميم تعليمي</strong><span>المجسم 3D تفاعلي وبارامتري، لكن الأجزاء التي لم تُقَس تمثيلية. هذه الصفحة ليست رسومات تصنيع ولا اعتمادًا هندسيًا أو محاكاة فيزيائية للهواء والغراء.</span></div>
+          <aside class="inspector-card panel" aria-label="خصائص الجزء المحدد">
+            <div class="inspector-head"><div><span class="panel-kicker">PART INSPECTOR</span><h2 id="inspector-name">لا يوجد جزء محدد</h2></div><span id="confidence-tag" class="confidence-tag">—</span></div>
+            <p id="inspector-description" class="muted">المس قطعة في المجسم أو اخترها من شجرة التجميع.</p>
+            <label class="lock-row"><input id="fixed-lock" type="checkbox" disabled /><span>تثبيت القطعة في مكانها أثناء محاكاة الحركة</span></label>
+            <div class="property-block">
+              <div class="property-title"><strong>الموضع</strong><span>مم · عالم التصميم</span></div>
+              <div class="triple-inputs"><label>X<input data-pos-axis="x" type="number" step="1" inputmode="decimal" disabled /></label><label>Y<input data-pos-axis="y" type="number" step="1" inputmode="decimal" disabled /></label><label>Z<input data-pos-axis="z" type="number" step="1" inputmode="decimal" disabled /></label></div>
+            </div>
+            <div class="property-block">
+              <div class="property-title"><strong>الدوران</strong><span>درجة</span></div>
+              <div class="triple-inputs"><label>Rx<input data-rot-axis="x" type="number" step="1" inputmode="decimal" disabled /></label><label>Ry<input data-rot-axis="y" type="number" step="1" inputmode="decimal" disabled /></label><label>Rz<input data-rot-axis="z" type="number" step="1" inputmode="decimal" disabled /></label></div>
+            </div>
+            <div class="property-block">
+              <div class="property-title"><strong>الأبعاد</strong><span>مم · أبعاد القطعة المحددة</span></div>
+              <div class="triple-inputs"><label>عرض X<input data-size-axis="x" type="number" min="1" step="1" inputmode="decimal" disabled /></label><label>ارتفاع Y<input data-size-axis="y" type="number" min="1" step="1" inputmode="decimal" disabled /></label><label>عمق Z<input data-size-axis="z" type="number" min="1" step="1" inputmode="decimal" disabled /></label></div>
+              <label class="inner-diameter-row">قطر داخلي / فتحة (مم)<input id="inner-diameter" type="number" min="0" step="0.1" inputmode="decimal" disabled /></label>
+              <label class="measure-check"><input id="measured-toggle" type="checkbox" disabled /><span>هذه الأبعاد قِستها على قطعة فعلية</span></label>
+              <button id="apply-dimensions" class="button button-outline full-button" type="button" disabled>تطبيق الأبعاد على المجسم</button>
+              <div class="size-nudge-grid" aria-label="زيادة أو تقليل أبعاد الجزء"><button data-size-nudge="x-" type="button" disabled>عرض X −</button><button data-size-nudge="x+" type="button" disabled>عرض X ＋</button><button data-size-nudge="y-" type="button" disabled>ارتفاع Y −</button><button data-size-nudge="y+" type="button" disabled>ارتفاع Y ＋</button><button data-size-nudge="z-" type="button" disabled>عمق Z −</button><button data-size-nudge="z+" type="button" disabled>عمق Z ＋</button></div>
+            </div>
+            <div class="property-block axis-editor">
+              <div class="property-title"><strong>إزاحة موجّهة</strong><span>اختر المحور ثم أدخل قيمة</span></div>
+              <div class="axis-selector" role="group" aria-label="اختيار المحور"><button data-axis="x" type="button" class="active">X</button><button data-axis="y" type="button">Y</button><button data-axis="z" type="button">Z</button></div>
+              <div class="axis-entry"><input id="axis-value" type="number" step="1" inputmode="decimal" placeholder="مثال: 25 مم" disabled /><button class="button button-outline" id="apply-axis-value" type="button" disabled>تطبيق</button></div>
+              <div class="nudge-grid" aria-label="إزاحة القطعة بخطوات صغيرة"><button data-nudge="z+" type="button" disabled>↑ Z</button><button data-nudge="y+" type="button" disabled>↑ Y</button><button data-nudge="x-" type="button" disabled>← X</button><button data-nudge="x+" type="button" disabled>→ X</button><button data-nudge="y-" type="button" disabled>↓ Y</button><button data-nudge="z-" type="button" disabled>↓ Z</button></div>
+            </div>
+            <div class="inspector-actions"><button class="small-button" id="duplicate-part" type="button" disabled>نسخ</button><button class="small-button" id="toggle-visibility" type="button" disabled>إخفاء</button><button class="small-button danger" id="delete-part" type="button" disabled>حذف</button></div>
+            <div id="inspector-warning" class="mini-warning" hidden></div>
+          </aside>
+        </section>
 
-          <div class="workbench-layout">
-            <section class="viewport-panel panel" aria-label="عارض الماكينة ثلاثي الأبعاد">
-              <div class="viewport-toolbar">
-                <div class="viewport-title"><span class="panel-kicker">المشهد الحي</span><strong>تكوين الماكينة</strong></div>
-                <div class="layout-switch" role="group" aria-label="اختيار ترتيب المحطات">
-                  <button class="layout-button active" data-layout="linear" type="button">خطي</button>
-                  <button class="layout-button" data-layout="L" type="button">L</button>
-                  <button class="layout-button" data-layout="U" type="button">U</button>
-                </div>
-              </div>
-              <div class="viewport-frame">
-                <div id="three-mount" class="three-mount"></div>
-                <div class="viewport-badge"><span class="badge-pulse"></span><span id="scene-scale-label">المقياس: تصوري — أدخل قياساتك</span></div>
-                <div class="viewport-help"><span>اسحب للدوران</span><span>عجلة/قرص للتقريب</span><span>انقر على جزء لشرحه</span></div>
-                <div class="viewport-controls" role="group" aria-label="أدوات عرض المجسم">
-                  <button type="button" data-camera="iso" title="منظور عام">3D</button><button type="button" data-camera="top" title="من أعلى">↑</button><button type="button" data-camera="front" title="من الأمام">أمام</button><button type="button" id="reset-camera" title="إعادة المشهد">إعادة</button>
-                </div>
-              </div>
-              <div class="view-legend"><span><i class="legend-blue"></i> مسار حركة/هواء تصوري</span><span><i class="legend-yellow"></i> قياس أو قرار مفتوح</span><span><i class="legend-muted"></i> جزء لم يُقَس</span></div>
-              <div class="layout-note"><strong id="layout-note-title">التخطيط الخطي</strong><span id="layout-note-text">ترتيب واضح للمحطات حول مسار مستقيم. مسار صف الأغطية مستقيم، ولا يعني ذلك أن طول المسار أو مواضع المحطات معتمدة.</span></div>
-            </section>
+        <section id="design-panel" class="workspace-panel active">
+          <div class="panel-heading"><div><span class="panel-kicker">BUILD WITH COMPONENTS</span><h2>مكتبة القطع وشجرة التجميع</h2><p>ابدأ بقطعة بسيطة، اخترها لتعديل أبعادها مباشرة. الأبعاد الابتدائية مجرد شكل تمثيلي.</p></div><span class="confidence-tag">وحدات النموذج: mm</span></div>
+          <div class="design-grid">
+            <div class="library-box panel-inset"><div class="property-title"><strong>إضافة قطعة بارامترية</strong><span>أشكال مدعومة v2</span></div><div class="library-controls"><select id="catalog-kind" aria-label="نوع القطعة"></select><button class="button button-primary" id="add-part" type="button">＋ أضف للمشهد</button></div><p class="micro-note">قرص الترس لا يحتوي أسنانًا؛ لا يحاكي نسبة نقل أو تعشيق. لا توجد أسطح CAD حرة أو ملفات STEP.</p><div class="assembly-quick-link"><strong>إنشاء علاقة بين قطعتين</strong><div class="joint-controls"><select id="joint-parent" aria-label="القطعة الأب"></select><select id="joint-kind" aria-label="نوع المفصل"><option value="fixed">ثابت</option><option value="slider">منزلق</option><option value="revolute">دوراني</option></select></div><div class="joint-controls"><select id="joint-axis" aria-label="محور الحركة"><option value="x">محور X</option><option value="y">محور Y</option><option value="z">محور Z</option></select><input id="joint-min" type="number" value="0" aria-label="الحد الأدنى" /><input id="joint-max" type="number" value="120" aria-label="الحد الأقصى" /><button id="create-joint" class="small-button" type="button" disabled>ربط القطعة المحددة</button></div><p class="micro-note">حدود المنزلق بالملليمتر؛ حدود الدوران بالدرجة. الارتباط التعليمي ليس اعتمادًا لمحور أو محمل حقيقي.</p></div></div>
+            <div class="tree-box panel-inset"><div class="property-title"><strong>شجرة المكونات</strong><span id="part-count">0 قطعة</span></div><div id="part-tree" class="part-tree" role="tree"></div></div>
+            <div class="joint-box panel-inset"><div class="property-title"><strong>علاقات التجميع</strong><span>مفاصل محدودة</span></div><div id="joint-list" class="joint-list"></div></div>
+            <div class="design-explainer panel-inset"><span class="panel-kicker">خطوة عملية</span><h3>كيف أبني تجميعًا؟</h3><ol><li>أضف عارضة أو لوحًا، ثم اكتب أبعاده المقاسة في خصائصه.</li><li>اختر القطعة في المشهد؛ المقابض تتيح تحريكها/تدويرها/تحجيمها، والأرقام تطبق على المحاور.</li><li>اختر قطعة أبًا ونوع المفصل لربط جزء متحرك بقاعدة. أعد اختبار كامل الحركة بصريًا.</li><li>احفظ JSON محليًا. المجسم/المصادم تقريبي وليس قائمة قص أو ملف تصنيع.</li></ol></div>
+          </div>
+        </section>
 
-            <aside class="designer-panel panel">
-              <div class="panel-heading"><div><span class="panel-kicker">مدخلات التصميم</span><h2>بيانات العينة والوحدات</h2></div><span class="unit-pill">مم</span></div>
-              <p class="panel-intro">ابدأ بقياس المنتج الفعلي. اضغط على حقل القياس لمعرفة موضعه في العينة.</p>
-              <div class="measurement-group">
-                <div class="group-title"><span class="step-index">01</span><div><strong>الغطاء</strong><small>قِس من الحافة إلى الحافة</small></div><span class="unknown-tag">بحاجة لقياس</span></div>
-                <label class="measure-row"><span>القطر الخارجي <code>D-cap-out</code></span><span class="input-wrap"><input data-dimension="capOuterDiameter" type="number" min="0" step="0.1" placeholder="لم يُقَس" inputmode="decimal" /><b>مم</b></span></label>
-                <label class="measure-row"><span>القطر الداخلي <code>D-cap-in</code></span><span class="input-wrap"><input data-dimension="capInnerDiameter" type="number" min="0" step="0.1" placeholder="لم يُقَس" inputmode="decimal" /><b>مم</b></span></label>
-                <label class="measure-row"><span>الارتفاع <code>H-cap</code></span><span class="input-wrap"><input data-dimension="capHeight" type="number" min="0" step="0.1" placeholder="لم يُقَس" inputmode="decimal" /><b>مم</b></span></label>
+        <section id="simulation-panel" class="workspace-panel" hidden>
+          <div class="panel-heading"><div><span class="panel-kicker">M-01 SIX-STEP CYCLE</span><h2>الحركة الأساسية والتحكم الافتراضي</h2><p>أعيد بناؤها من ملف المستخدم الحركي؛ التسلسل ومقادير المشاوير ما زالت تحتاج قياسًا واعتمادًا.</p></div><span class="confidence-tag">لا يوجد PLC حقيقي</span></div>
+          <div class="simulation-grid">
+            <article class="sim-card panel-inset"><div class="sim-toolbar"><div><span id="cycle-state" class="status-pill">متوقف — جاهز</span><h3 id="cycle-step-title">دفع صف الأغطية</h3></div><div class="sim-actions"><button class="button button-primary" id="cycle-play" type="button">تشغيل</button><button class="small-button" id="cycle-step" type="button">خطوة</button><button class="small-button" id="cycle-reset" type="button">إعادة ضبط</button></div></div><div class="progress-track"><div id="cycle-progress"></div></div><p id="cycle-step-explanation" class="sim-copy"></p><div class="two-readouts"><div><small>مشغل افتراضي</small><strong id="step-actuator">—</strong></div><div><small>إشارة مطلوبة (افتراضية)</small><strong id="step-sensor">—</strong></div></div><p id="step-caution" class="caution-line"></p><div id="cycle-step-list" class="cycle-steps"></div></article>
+            <aside class="plc-card panel-inset">
+              <div class="property-title"><div><span class="panel-kicker">VIRTUAL I/O</span><strong>لوحة PLC تعليمية</strong></div><span id="controller-mode" class="confidence-tag">تلقائي</span></div>
+              <div class="controller-mode-buttons"><button class="small-button active" data-control-mode="auto" type="button">تلقائي</button><button class="small-button" data-control-mode="manual" type="button">يدوي</button></div>
+              <label class="speed-label">سرعة زمن المحاكاة <output id="speed-readout">1.0×</output><input id="cycle-speed" type="range" min="0.25" max="2" step="0.05" value="1" /></label>
+              <h4>سرعة كل مشغل (نسبة مستقلة)</h4>
+              <div class="actuator-speed-grid">
+                <label class="speed-label">دافع الغطاء <output data-speed-readout="pusher">1.00×</output><input data-actuator-speed="pusher" type="range" min="0.25" max="2" step="0.05" value="1" /></label>
+                <label class="speed-label">لسان الغراء <output data-speed-readout="glue">1.00×</output><input data-actuator-speed="glue" type="range" min="0.25" max="2" step="0.05" value="1" /></label>
+                <label class="speed-label">لسان الروندلة <output data-speed-readout="slide">1.00×</output><input data-actuator-speed="slide" type="range" min="0.25" max="2" step="0.05" value="1" /></label>
+                <label class="speed-label">الفاكيوم <output data-speed-readout="vacuum">1.00×</output><input data-actuator-speed="vacuum" type="range" min="0.25" max="2" step="0.05" value="1" /></label>
+                <label class="speed-label">رأس الكبس <output data-speed-readout="press">1.00×</output><input data-actuator-speed="press" type="range" min="0.25" max="2" step="0.05" value="1" /></label>
               </div>
-              <div class="measurement-group">
-                <div class="group-title"><span class="step-index">02</span><div><strong>الروندلة</strong><small>سجّل المقاس والخامة بعد فحص العينة</small></div><span class="unknown-tag">بحاجة لقياس</span></div>
-                <label class="measure-row"><span>القطر الخارجي <code>D-liner</code></span><span class="input-wrap"><input data-dimension="washerDiameter" type="number" min="0" step="0.1" placeholder="لم يُقَس" inputmode="decimal" /><b>مم</b></span></label>
-                <label class="measure-row"><span>قطر الفتحة <code>D-liner-in</code></span><span class="input-wrap"><input data-dimension="washerInnerDiameter" type="number" min="0" step="0.1" placeholder="إن وجدت" inputmode="decimal" /><b>مم</b></span></label>
-                <label class="measure-row"><span>السماكة <code>T-liner</code></span><span class="input-wrap"><input data-dimension="washerThickness" type="number" min="0" step="0.01" placeholder="لم تُقَس" inputmode="decimal" /><b>مم</b></span></label>
-              </div>
-              <div class="measurement-group">
-                <div class="group-title"><span class="step-index">03</span><div><strong>مجرى الغطاء U</strong><small>قِس المجرى أو أدخل القيمة بعد تصميمها</small></div><span class="unknown-tag">قرار تصميم</span></div>
-                <label class="measure-row"><span>العرض الداخلي <code>W-U</code></span><span class="input-wrap"><input data-dimension="channelInnerWidth" type="number" min="0" step="0.1" placeholder="لم يُحدّد" inputmode="decimal" /><b>مم</b></span></label>
-                <label class="measure-row"><span>الخلوص لكل جانب <code>C-side</code></span><span class="input-wrap"><input data-dimension="channelClearancePerSide" type="number" min="0" step="0.1" placeholder="اختيارك — لا توصية" inputmode="decimal" /><b>مم</b></span></label>
-                <p class="field-help">إذا تركت W-U فارغًا، يستخدم المجسم: قطر الغطاء + 2 × الخلوص الذي اخترته. إذا أدخلت W-U، له الأولوية ويظهر الفرق. الخلوص قرار تجريبي لا يوصي الموقع بقيمته.</p>
-                <label class="measure-row"><span>ارتفاع الحافة <code>H-wall</code></span><span class="input-wrap"><input data-dimension="channelWallHeight" type="number" min="0" step="0.1" placeholder="لم يُحدّد" inputmode="decimal" /><b>مم</b></span></label>
-                <label class="measure-row"><span>طول المجرى <code>L-U</code></span><span class="input-wrap"><input data-dimension="channelLength" type="number" min="0" step="1" placeholder="لم يُحدّد" inputmode="decimal" /><b>مم</b></span></label>
-                <div class="fit-result" id="channel-fit"><span class="fit-icon">↔</span><span>أدخل قطر الغطاء وعرض المجرى لمقارنة هندسية أولية؛ الخلوص النهائي يحتاج تجربة فعلية.</span></div>
-              </div>
-              <details class="measurement-group more-measurements"><summary><span class="step-index">04</span><span><strong>أشواط ومساحة العمل</strong><small>اختيارية الآن؛ تُقاس أو تُراجع لاحقًا</small></span></summary>
-                <label class="measure-row"><span>مشوار دافع الأغطية <code>S-pusher</code></span><span class="input-wrap"><input data-dimension="capPusherStroke" type="number" min="0" step="1" placeholder="غير محدد" inputmode="decimal" /><b>مم</b></span></label>
-                <label class="measure-row"><span>مشوار لسان الروندلة <code>S-slide</code></span><span class="input-wrap"><input data-dimension="washerSlideStroke" type="number" min="0" step="1" placeholder="غير محدد" inputmode="decimal" /><b>مم</b></span></label>
-                <label class="measure-row"><span>مشوار الكبس <code>S-press</code></span><span class="input-wrap"><input data-dimension="pressStroke" type="number" min="0" step="1" placeholder="غير محدد" inputmode="decimal" /><b>مم</b></span></label>
-                <label class="measure-row"><span>عرض المساحة المتاحة <code>W-space</code></span><span class="input-wrap"><input data-dimension="workAreaWidth" type="number" min="0" step="1" placeholder="غير محدد" inputmode="decimal" /><b>مم</b></span></label>
-                <label class="measure-row"><span>عمق المساحة المتاحة <code>D-space</code></span><span class="input-wrap"><input data-dimension="workAreaDepth" type="number" min="0" step="1" placeholder="غير محدد" inputmode="decimal" /><b>مم</b></span></label>
-              </details>
-              <div class="measurement-footer"><span><i class="tiny-lock"></i> تُحفظ البيانات في هذا المتصفح فقط</span><button type="button" id="clear-measurements">مسح المدخلات</button></div>
+              <p class="micro-note">إذا انتهى زمن الخطوة قبل اكتمال المشوار، تتوقف الدورة عند موضع جزئي بدل تجاوز الحساس تلقائيًا.</p>
+              <h4>مخارج صمامات افتراضية</h4><div id="output-grid" class="io-grid"></div>
+              <h4>إشارات حساسات افتراضية</h4><p class="micro-note">إلغاء الإشارة أثناء التلقائي يحاكي توقفًا عند انتظار تأكيد؛ هذه أسماء وظيفية وليست توزيع أطراف.</p><div id="sensor-grid" class="io-grid"></div>
+              <div id="controller-alert" class="controller-alert">كل إشارة في هذا القسم افتراضية؛ لا يوجد اتصال كهربائي.</div>
             </aside>
           </div>
-
-          <section class="inspector panel" aria-live="polite">
-            <div class="inspector-icon" id="inspector-icon">M1</div><div class="inspector-copy"><span class="panel-kicker">مستكشف الأجزاء</span><h2 id="selected-part-name">اختر جزءًا من المجسم</h2><p id="selected-part-description">يمكنك أيضًا اختيار جزء من القائمة أدناه لمعرفة وظيفته والقياسات والبيانات التي تحتاج إلى جمعها.</p></div><div class="inspector-action"><span class="unknown-tag" id="selected-part-status">غير محدد</span><button class="text-button" id="open-parts" type="button">قائمة جميع الأجزاء ←</button></div>
-          </section>
-          <section class="module-strip" id="module-strip" aria-label="مجموعات أجزاء الماكينة"></section>
+          <div class="simulation-footer"><button id="record-video" class="button button-outline" type="button">تسجيل حركة الشاشة WebM · حد أقصى 30 ثانية</button><span id="record-status">التسجيل من Canvas الحالي فقط؛ قد لا يدعمه كل متصفح.</span></div>
         </section>
 
-        <section class="view" id="view-cycle" aria-labelledby="cycle-title">
-          <div class="page-heading"><div><div class="eyebrow">CYCLE / TEACHING MODE</div><h1 id="cycle-title">تتابع التشغيل المقترح</h1><p>استكشف علاقة كل خطوة بالمشغل والحساس والجزء المتحرك، قبل كتابة برنامج التحكم.</p></div><span class="proposed-chip">تتابع مقترح — يحتاج اعتمادًا</span></div>
-          <div class="notice notice-warning"><strong>التحريك ليس إثبات تشغيل</strong><span>توقيت الحركة في العرض توضيحي. يجب اختيار الحساسات وشروط الانتقال والمهلات بعد تحديد الأجزاء الفعلية ومراجعة مخاطر الماكينة.</span></div>
-          <div class="cycle-shell panel"><div class="cycle-toolbar"><div class="cycle-status"><span class="live-dot" id="cycle-live-dot"></span><span id="cycle-state-label">متوقف — جاهز للاستكشاف</span></div><div class="cycle-actions"><button class="button button-primary" id="cycle-play" type="button">تشغيل العرض</button><button class="button button-quiet" id="cycle-step" type="button">الخطوة التالية</button><button class="button button-quiet" id="cycle-reset" type="button">إعادة البداية</button></div></div><div class="cycle-progress"><div id="cycle-progress-bar"></div></div><div class="cycle-content"><div class="cycle-current"><span class="panel-kicker" id="cycle-step-number">الخطوة 1</span><h2 id="cycle-step-title">التحقق من حالة الأمان</h2><p id="cycle-step-description"></p><div class="cycle-caution" id="cycle-caution"></div></div><div class="signal-stack"><div><small>الجزء المتأثر</small><strong id="cycle-parts">—</strong></div><div><small>شرط انتقال مقترح</small><strong id="cycle-sensor">—</strong></div></div></div><div class="cycle-step-list" id="cycle-step-list"></div></div>
-          <div class="two-column-cards"><article class="info-card"><span class="panel-kicker">قاعدة التحكم</span><h3>تحقق قبل الانتقال</h3><p>المستند يقترح تأكيد مواضع البساتم والفاكيوم بالحساسات عند الحاجة. المؤقت وحده لا يثبت وصول الحركة إلى موضعها.</p></article><article class="info-card warning-card"><span class="panel-kicker">حالة غير محسومة</span><h3>توزيع المشغلات الأربعة</h3><p>رموز C1–C4 في المرجع تنظيم أولي؛ وظيفة كل بستم ومشواره وقوته تحتاج تحديدًا. لا توصل صمامات أو أحمال مباشرة بمدخل/مخرج لوحة تحكم دون واجهات وحماية معتمدة.</p></article></div>
-          <section class="fault-guide panel"><div class="panel-heading"><div><span class="panel-kicker">SYMPTOM / SAFE FIRST CHECK</span><h2>لو ظهرت مشكلة: ماذا أسجل أولًا؟</h2></div><span class="unknown-tag">مؤشرات تعليمية</span></div><p class="fault-intro">هذه احتمالات للفحص والتوثيق وليست تشخيصًا مضمونًا أو تعليمات إصلاح. أوقف الحركة واعزل مصادر الطاقة قبل الاقتراب؛ لا تغيّر الضغط أو تضف آلية جديدة بالتخمين.</p><div id="fault-guide-grid" class="fault-grid"></div></section>
-        </section>
-
-        <section class="view" id="view-pneumatic" aria-labelledby="pneumatic-title">
-          <div class="page-heading"><div><div class="eyebrow">PNEUMATICS / CONTROL</div><h1 id="pneumatic-title">كيف يتحول الهواء إلى حركة؟</h1><p>مخطط وظيفي مبسط لتعلّم المكونات، وليس مخطط توصيل للتنفيذ.</p></div><span class="proposed-chip">ضغط وموديلات الصمامات غير محددة</span></div>
-          <div class="notice notice-danger"><strong>لا توصل من هذا الرسم</strong><span>نوع الصمام وجهد ملفه ووضعه الطبيعي والضغط والتدفق غير محددة. يجب مراجعة لوحة بيانات المكونات ومخطط نيوماتيك وكهرباء معتمدين قبل التوصيل.</span></div>
-          <div class="diagram-panel panel"><div class="panel-heading"><div><span class="panel-kicker">AIR PATH / CONCEPTUAL</span><h2>مسار الهواء المضغوط</h2></div><span class="legend-label"><i class="legend-blue"></i> هواء / إشارة مفاهيمية</span></div><div id="pneumatic-diagram" class="diagram-canvas"></div><p class="diagram-caption">اتجاه الأسهم يشرح العلاقة الوظيفية فقط. لا يحدد أقطار الخراطيم أو عدد المنافذ أو وضع الصمام عند انقطاع الطاقة.</p></div>
-          <div class="diagram-panel panel"><div class="panel-heading"><div><span class="panel-kicker">CONTROL / CONCEPTUAL</span><h2>من طلب البدء إلى تأكيد الحركة</h2></div><span class="legend-label"><i class="legend-yellow"></i> يحتاج اختيارًا</span></div><div id="control-diagram" class="diagram-canvas"></div><p class="diagram-caption">دائرة الطوارئ والعزل الهوائي والحماية يجب أن تكون مستقلة ومصممة حسب تقييم مخاطر الآلة؛ ليست وظيفة برمجية عادية.</p></div>
-          <div class="force-calculator panel"><div class="calculator-copy"><span class="panel-kicker">حساب تعليمي</span><h2>القوة النظرية للبستم</h2><p>قوة الامتداد = الضغط × مساحة المكبس. أدخل الضغط والقطر بعد توفر بيانات فعلية؛ النتيجة تقريبية ولا تكفي لاختيار البستم.</p><div class="formula">F = P × A <span>·</span> A = π × D² / 4</div><div class="formula-note">عند الرجوع تقل المساحة بسبب عمود البستم: A<sub>return</sub> = π × (D² − d²) / 4</div></div><div class="calculator-inputs"><label>الضغط <span><input id="pressure-input" type="number" min="0" step="0.1" placeholder="لم يحدد" inputmode="decimal" /><b>bar</b></span></label><label>قطر البستم <span><input id="bore-input" type="number" min="0" step="0.1" placeholder="لم يحدد" inputmode="decimal" /><b>مم</b></span></label><label>قطر العمود (اختياري) <span><input id="rod-input" type="number" min="0" step="0.1" placeholder="غير معروف" inputmode="decimal" /><b>مم</b></span></label><div class="force-result"><small>قوة نظرية للامتداد</small><strong id="force-output">— نيوتن</strong><small id="return-output">قوة الرجوع: تحتاج قطر العمود</small></div></div></div>
-          <div class="safety-grid"><article class="safety-card"><span>01</span><h3>تجهيز الهواء</h3><p>مصدر الهواء، منظم الضغط، المقياس، صمام العزل والتفريغ ومواصفات التدفق لم تُحدّد بعد.</p></article><article class="safety-card"><span>02</span><h3>الصمامات والملفات</h3><p>تحقق من نوع الصمام وعدد المنافذ ووضعه الطبيعي والجهد والتيار الفعلي قبل اختيار مصدر القدرة والواجهة.</p></article><article class="safety-card"><span>03</span><h3>الطوارئ والصيانة</h3><p>غطِّ نقاط القص والسحق، وامنع الوصول للحركة، وصمّم إيقافًا طارئًا وعزلًا وتفريغًا آمنًا للهواء.</p></article></div>
-        </section>
-
-        <section class="view" id="view-parts" aria-labelledby="parts-title">
-          <div class="page-heading"><div><div class="eyebrow">PARTS / OPEN DECISIONS</div><h1 id="parts-title">ما الذي أحتاجه قبل شراء القطع؟</h1><p>قائمة إعداد هندسية: ما نعرفه، وما يجب قياسه، وما يحتاج مراجعة المورد أو المهندس.</p></div><button class="button button-outline" id="download-bom" type="button">تنزيل قائمة البيانات CSV</button></div>
-          <div class="notice notice-danger"><strong>لا تشتري اعتمادًا على المسودة وحدها</strong><span>الأنواع والأبعاد المذكورة في HTML قديمة وغير معتمدة. استخدم كل بند كنقطة تحقق، ثم طابقه مع عينة المنتج وبيانات المورد.</span></div>
-          <div class="parts-grid" id="parts-grid"></div>
-          <div class="decisions-panel panel"><div class="panel-heading"><div><span class="panel-kicker">OPEN ENGINEERING ITEMS</span><h2>قرارات ما زالت مفتوحة</h2></div><span class="unknown-tag">لا تُحسم بالتخمين</span></div><div class="decision-list" id="decision-list"></div></div>
-          <div class="inputs-needed panel"><div class="panel-heading"><div><span class="panel-kicker">NEXT DATA TO COLLECT</span><h2>بيانات ترفع دقة النموذج</h2></div></div><div class="data-checklist" id="data-checklist"></div></div>
-          <div class="final-note"><strong>قبل تصنيع أي جزء:</strong> اعتمد الأبعاد والأحمال والمواد والحواجز ومخططات الكهرباء والنيوماتيك مع مهندس مختص، ثم اختبر كل حركة منفردة وبسرعة منخفضة ووثق نتائج القبول.</div>
+        <section id="reference-panel" class="workspace-panel" hidden>
+          <div class="panel-heading"><div><span class="panel-kicker">M-01 ENGINEERING NOTES</span><h2 id="engineering-notes">ماذا نعرف، وماذا يجب أن أقيس؟</h2><p>دليل مبتدئ مختصر؛ الرجوع للمواصفة والمهندس والمورد يسبق التصنيع والشراء.</p></div><span class="confidence-tag warn">قرارات مفتوحة</span></div>
+          <div class="reference-grid">
+            <article class="panel-inset"><h3>أجزاء M-01 وما ينبغي جمعه</h3><ul class="reference-list"><li><strong>الشاسيه:</strong> طول/عرض/ارتفاع مساحة العمل، القطاع والسماكة واللحام يحددها التصميم الهندسي.</li><li><strong>مخزن الأغطية ومجرى U:</strong> قطر وارتفاع الغطاء، عرض المجرى والخلوص ومنع سقوط غطاءين.</li><li><strong>بستم الدفع الواحد:</strong> المشوار والحمل والمحاذاة وقطر البستم/الضغط بعد القياس والحساب.</li><li><strong>وحدة الغراء:</strong> نوع المادة وجرعة التطبيق وزمن الانتظار ومنع التنقيط؛ لا يوجد نموذج كيميائي.</li><li><strong>مخزن الروندلة واللسان:</strong> قطر الروندلة وسماكتها والجيب ومشوار اللسان ومنع دخول قطعتين.</li><li><strong>الفاكيوم/الكبس:</strong> قطر الكوب والتدفق وقوة الكبس والمحاذاة؛ هل الرأس واحد أم رأسان قرار مفتوح.</li><li><strong>النيوماتيك والتحكم:</strong> عدد البساتم/الصمامات متعارض بين المرفقات، الجهد والضغط والحساسات غير معتمدة.</li></ul></article>
+            <article class="panel-inset warning-card"><h3>حدود التصادم والنموذج</h3><p>المحرك يستخدم مصادمات Rapier مبسطة لكل شكل مدعوم؛ العارضة والمجرى أجسام مركبة بسيطة، بينما بعض القطع الدائرية مصادم أسطواني تقريبي. يستطيع المحرك إيقاف مسار يمرّ في مصادم آخر ضمن هذا النموذج، لكنه لا يفحص الإجهاد، قوة الهواء أو الغراء، مرونة المادة، جودة اللحام، تفاوت التصنيع أو أداء قطعة المورد.</p><p>إن تغيرت أبعاد القطع، راجع التصادمات وأعد التجربة على نموذج فعلي محمي، ولا تعتمد الحركة وحدها كاختبار قبول.</p></article>
+            <article class="panel-inset"><h3>خط أساس التصميم</h3><ul class="reference-list"><li>الأغطية متلامسة في صف، وبستم واحد يدفعها.</li><li>لا يوجد سير ناقل أو مفهرس دوار في التصميم المعتمد.</li><li>لا نضيف مخرجًا آليًا للمنتج أو دافعًا ثانيًا.</li><li>منظم الهواء والعزل والتفريغ والحواجز والإيقاف الطارئ تحتاج مراجعة مختص.</li></ul></article>
+            <article class="panel-inset"><h3>حساب القوة النظرية (تعليمي فقط)</h3><p>F = P × A، ومساحة المكبس A = π × D² ÷ 4. أدخل قيمًا حقيقية فقط؛ النتيجة لا تحسب الاحتكاك أو الفواقد ولا تكفي لاختيار قطعة.</p><div class="force-row"><label>ضغط فعلي (bar)<input id="pressure-input" type="number" min="0" step="0.1" placeholder="غير مقاس" /></label><label>قطر البستم (مم)<input id="bore-input" type="number" min="0" step="0.1" placeholder="غير مقاس" /></label><strong id="force-output">— نيوتن</strong></div></article>
+          </div>
+          <div id="pneumatic-diagram" class="diagram-host panel-inset"></div>
+          <div id="control-diagram" class="diagram-host panel-inset"></div>
+          <div class="final-safety"><strong>قبل التنفيذ الحقيقي:</strong> تأكد من القياسات، الأحمال، مواصفات المورد، حماية نقاط الانحشار، الإيقاف الطارئ والعزل الآمن بمراجعة مهندس مختص. الموقع لا يصدر شهادة أمان ولا رسم تصنيع.</div>
         </section>
       </main>
-      <footer class="footer"><span>ورشة M-01 · نموذج تعليمي قيد التطوير</span><span>القياس الفعلي والاعتماد الهندسي مسؤولية فريق التنفيذ المختص</span></footer>
-      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <footer><span>M-01 · استوديو تعليمي للتركيب الميكانيكي</span><span>القيم غير المقاسة تمثيلية وليست أبعاد تصنيع</span></footer>
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
     </div>
+    <div id="portrait-guard" class="portrait-guard" aria-live="polite"><div class="rotate-glyph" aria-hidden="true">↻</div><span class="panel-kicker">LANDSCAPE WORKSPACE</span><h1>أدر الهاتف أفقيًا</h1><p>مساحة بناء وتجميع القطع تحتاج العرض الأفقي حتى ترى المقابض والمقاسات بوضوح. إذا كان جهازك يسمح، جرّب ملء الشاشة ثم قفل الاتجاه.</p><button id="try-landscape" class="button button-primary" type="button">محاولة ملء الشاشة أفقيًا</button><small>إذا رفض المتصفح القفل، أدر الجهاز يدويًا. الصفحة لا تستطيع فرض الاتجاه على كل هاتف.</small></div>
   </body>
 </html>
